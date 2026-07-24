@@ -46,7 +46,7 @@ unsigned int ballot(int predicate) const
 
 ## 约束说明
 
-无
+仅支持`thread_block_tile`的模板参数`Size`小于等于32的场景，即仅支持单Warp内线程子组。
 
 ## 调用示例
 

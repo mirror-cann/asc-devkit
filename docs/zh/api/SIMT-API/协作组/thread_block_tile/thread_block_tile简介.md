@@ -26,3 +26,23 @@ int all(int predicate) const;
 unsigned int ballot(int predicate) const;
 unsigned long long size() const;
 ```
+
+## 接口支持范围
+
+**表1**  `thread_block_tile`接口支持范围
+
+| 接口 | `Size <= 32`（单Warp内线程子组） | `Size > 32`（跨Warp线程子组） |
+| --- | --- | --- |
+| `sync()` | 支持 | 支持 |
+| `thread_rank()` | 支持 | 支持 |
+| `num_threads()` | 支持 | 支持 |
+| `size()` | 支持 | 支持 |
+| `meta_group_rank()` | 支持 | 支持 |
+| `meta_group_size()` | 支持 | 支持 |
+| `shfl()` | 支持 | 支持 |
+| `any()` | 支持 | 支持 |
+| `all()` | 支持 | 支持 |
+| `ballot()` | 支持 | 不支持 |
+| `shfl_up()` | 支持 | 不支持 |
+| `shfl_down()` | 支持 | 不支持 |
+| `shfl_xor()` | 支持 | 不支持 |

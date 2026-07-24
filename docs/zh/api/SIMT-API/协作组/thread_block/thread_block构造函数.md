@@ -29,12 +29,43 @@
 ## 函数原型
 
 ```c++
+// 默认场景使用此接口创建thread_block
 thread_block this_thread_block()
+```
+
+```c++
+// 后续需要创建跨warp的thread_block_tile（size > 32）时使用此接口创建thread_block
+template <unsigned int MaxBlockSize>
+thread_block this_thread_block(block_tile_memory<MaxBlockSize>& scratch)
 ```
 
 ## 参数说明
 
-无
+### 接口参数说明
+
+**表1**  参数说明
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| scratch | 输入 | Global Memory或Unified Buffer上的[block_tile_memory](#block_tile_memory说明)对象，用于为`thread_block`携带跨Warp临时存储。 |
+
+### block_tile_memory说明
+
+`block_tile_memory`用于为跨Warp的`thread_block_tile`提供组内同步和跨Warp通信所需的临时存储。结构体大小可通过`sizeof()`接口获取。
+
+```c++
+template <unsigned int MaxBlockSize = 1024>
+struct block_tile_memory
+```
+
+**表2**  `block_tile_memory`模板参数说明
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| MaxBlockSize | 输入 | 模板参数，指定当前线程块中需要支持的最大线程数，必须大于0且小于等于2048，必须是Warp大小32的整数倍，默认值为1024。 |
+
+> [!CAUTION]注意 
+> 线程块实际启动线程数不能超过`MaxBlockSize`，否则是未定义行为。
 
 ## 返回值说明
 
@@ -42,7 +73,8 @@ thread_block this_thread_block()
 
 ## 约束说明
 
-无
+- 线程块实际启动线程数不能超过`MaxBlockSize`。
+- `scratch`对应的[block_tile_memory](#block_tile_memory说明)对象必须位于Global Memory或Unified Buffer，不能是在栈空间中创建的对象。
 
 ## 调用示例
 

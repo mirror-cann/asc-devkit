@@ -17,11 +17,83 @@
 #endif
 
 #include "simt_api/common_functions.h"
+#include "simt_api/device_functions.h"
 #include "simt_api/device_types.h"
 #include "simt_api/asc_fp16.h"
 #include "simt_api/asc_bf16.h"
+#include "utils/debug/asc_assert.h"
 
 namespace cooperative_groups {
+
+namespace details {
+
+static constexpr unsigned int warp_size = 32; // equal to warpSize
+
+static constexpr bool is_power_of_two(unsigned int value) { return value != 0U && (value & (value - 1U)) == 0U; }
+
+enum class tile_memory_type : unsigned int {
+    generic,
+    ubuf,
+    gm,
+};
+
+template <tile_memory_type Space>
+struct tile_memory_type_tag {};
+
+template <tile_memory_type Space, typename T>
+struct tile_memory_pointer {
+    using type = T*;
+};
+
+template <typename T>
+struct tile_memory_pointer<tile_memory_type::ubuf, T> {
+    using type = __ubuf__ T*;
+};
+
+template <typename T>
+struct tile_memory_pointer<tile_memory_type::gm, T> {
+    using type = __gm__ T*;
+};
+
+template <tile_memory_type Space, typename T>
+using tile_memory_pointer_t = typename tile_memory_pointer<Space, T>::type;
+
+template <tile_memory_type Space, typename T>
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline tile_memory_pointer_t<Space, T> cast_tile_memory(uint64_t address)
+{
+    return reinterpret_cast<tile_memory_pointer_t<Space, T>>(address);
+}
+
+static constexpr unsigned int max_thread_block_size = 2048; // SIMT thread block support max thread num 2048
+
+struct multi_warp_scratch {
+    struct barrier_t {
+        unsigned int arrived[2]; // UB only support 32bit atomic
+    };
+    using communication_type = unsigned long long;
+    static constexpr unsigned int memory_barriers_count = 5; // One barrier per possible size of the group.
+    static constexpr unsigned int sync_memory_size = memory_barriers_count * sizeof(barrier_t);
+    static constexpr unsigned int communication_size = sizeof(communication_type);
+
+    barrier_t barriers[memory_barriers_count];
+    communication_type communication_memory[max_thread_block_size / warp_size];
+
+    static constexpr unsigned int scratch_size_needed(unsigned int max_block_size)
+    {
+        return sync_memory_size + max_block_size / warp_size * communication_size;
+    }
+};
+
+} // namespace details
+
+template <unsigned int MaxBlockSize = 1024> // default max thread num 1024 par thread block
+struct alignas(details::multi_warp_scratch::communication_size) block_tile_memory {
+    static_assert(
+        MaxBlockSize > 0 && MaxBlockSize <= details::max_thread_block_size, "MaxBlockSize must be in range 1..2048");
+    static_assert((MaxBlockSize % details::warp_size) == 0, "MaxBlockSize must be a multiple of warp size");
+
+    unsigned char storage[details::multi_warp_scratch::scratch_size_needed(MaxBlockSize)];
+};
 
 class _coalesced_group_data_access;
 class thread_block;
@@ -75,6 +147,18 @@ protected:
 
 class thread_block : public thread_group {
     friend __SIMT_DEVICE_FUNCTIONS_DECL__ inline thread_block this_thread_block();
+#if defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__) || defined(ASCENDC_CPU_DEBUG)
+    template <unsigned int MaxBlockSize>
+    friend __SIMT_DEVICE_FUNCTIONS_DECL__ inline thread_block this_thread_block(
+        block_tile_memory<MaxBlockSize>& scratch);
+#else
+    template <unsigned int MaxBlockSize>
+    friend __SIMT_DEVICE_FUNCTIONS_DECL__ inline thread_block this_thread_block(
+        __ubuf__ block_tile_memory<MaxBlockSize>& scratch);
+    template <unsigned int MaxBlockSize>
+    friend __SIMT_DEVICE_FUNCTIONS_DECL__ inline thread_block this_thread_block(
+        __gm__ block_tile_memory<MaxBlockSize>& scratch);
+#endif
     friend __SIMT_DEVICE_FUNCTIONS_DECL__ inline thread_group tiled_partition(
         const thread_group& parent, unsigned int tilesz);
     friend __SIMT_DEVICE_FUNCTIONS_DECL__ inline thread_group tiled_partition(
@@ -89,13 +173,32 @@ public:
     __SIMT_DEVICE_FUNCTIONS_DECL__ inline static unsigned int num_threads();
     __SIMT_DEVICE_FUNCTIONS_DECL__ inline static unsigned int size();
     __SIMT_DEVICE_FUNCTIONS_DECL__ inline static dim3 group_dim();
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline uint64_t _get_tile_memory() const;
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline details::tile_memory_type _get_tile_memory_type() const;
 
 private:
+    uint64_t _tile_memory;
+    details::tile_memory_type _tile_memory_type;
+
     __SIMT_DEVICE_FUNCTIONS_DECL__ inline thread_block();
+    template <details::tile_memory_type MemoryType>
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline thread_block(
+        uint64_t scratch_address, unsigned int max_block_size, details::tile_memory_type_tag<MemoryType>);
     __SIMT_DEVICE_FUNCTIONS_DECL__ inline thread_group create_tiled_group(unsigned int tile_size) const;
 };
 
 __SIMT_DEVICE_FUNCTIONS_DECL__ inline thread_block this_thread_block();
+
+#if defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__) || defined(ASCENDC_CPU_DEBUG)
+template <unsigned int MaxBlockSize>
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline thread_block this_thread_block(block_tile_memory<MaxBlockSize>& scratch);
+#else
+template <unsigned int MaxBlockSize>
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline thread_block this_thread_block(__ubuf__ block_tile_memory<MaxBlockSize>& scratch);
+
+template <unsigned int MaxBlockSize>
+__SIMT_DEVICE_FUNCTIONS_DECL__ inline thread_block this_thread_block(__gm__ block_tile_memory<MaxBlockSize>& scratch);
+#endif
 
 template <unsigned int Size, typename ParentT>
 class thread_block_tile;
@@ -140,6 +243,11 @@ public:
     __SIMT_DEVICE_FUNCTIONS_DECL__ inline int any(int predicate) const;
     __SIMT_DEVICE_FUNCTIONS_DECL__ inline int all(int predicate) const;
     __SIMT_DEVICE_FUNCTIONS_DECL__ inline unsigned int ballot(int predicate) const;
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline uint64_t _get_tile_memory() const { return 0U; }
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline details::tile_memory_type _get_tile_memory_type() const
+    {
+        return details::tile_memory_type::generic;
+    }
 
 protected:
     __SIMT_DEVICE_FUNCTIONS_DECL__ inline coalesced_group(unsigned int mask);
@@ -176,13 +284,33 @@ template <>
 struct tile_helpers<1> : public _tile_helpers<32, 0x00000001, 0x00, 0> {}; // thread_block_tile<1> config
 
 template <unsigned int Size>
-struct _is_valid_thread_block_tile_size {
-    static constexpr bool value = Size == 1 || Size == 2 || Size == 4 || Size == 8 || Size == 16 || Size == 32;
+struct _is_power_of_2 {
+    static constexpr bool value = Size != 0 && ((Size & (Size - 1)) == 0);
 };
 
 template <unsigned int Size>
-class thread_block_tile_base {
-    static_assert(_is_valid_thread_block_tile_size<Size>::value, "Size must be one of 1/2/4/8/16/32");
+struct _is_single_warp {
+    static constexpr bool value = Size <= details::warp_size;
+};
+
+template <unsigned int Size>
+struct _is_multi_warp {
+    static constexpr bool value = Size > details::warp_size&& Size <= details::max_thread_block_size;
+};
+
+template <unsigned int Size>
+struct _is_valid_single_warp_tile {
+    static constexpr bool value = _is_power_of_2<Size>::value && _is_single_warp<Size>::value;
+};
+
+template <unsigned int Size>
+struct _is_valid_multi_warp_tile {
+    static constexpr bool value = _is_power_of_2<Size>::value && _is_multi_warp<Size>::value;
+};
+
+template <unsigned int Size>
+class single_warp_thread_block_tile_base {
+    static_assert(_is_valid_single_warp_tile<Size>::value, "Size must be one of 1/2/4/8/16/32");
 
     using th = tile_helpers<Size>;
     static constexpr unsigned int numThreads = Size;
@@ -213,38 +341,143 @@ public:
     __SIMT_DEVICE_FUNCTIONS_DECL__ inline int any(int predicate) const;
     __SIMT_DEVICE_FUNCTIONS_DECL__ inline int all(int predicate) const;
     __SIMT_DEVICE_FUNCTIONS_DECL__ inline unsigned int ballot(int predicate) const;
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline uint64_t _get_tile_memory() const { return 0U; }
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline details::tile_memory_type _get_tile_memory_type() const
+    {
+        return details::tile_memory_type::generic;
+    }
 
 protected:
     __SIMT_DEVICE_FUNCTIONS_DECL__ static inline unsigned int build_mask();
     __SIMT_DEVICE_FUNCTIONS_DECL__ static inline unsigned int get_mask() { return build_mask(); }
 };
 
-template <unsigned int Size, typename ParentT = void>
-class thread_block_tile_impl : public thread_block_tile_base<Size>,
-                               public _static_parent_thread_block_tile_base<Size, ParentT> {
+template <unsigned int Size>
+class multi_warp_thread_block_tile_base {
+    static_assert(
+        _is_valid_multi_warp_tile<Size>::value,
+        "Size must be one of 64/128/256/512/1024/2048 for multi-warp thread_block_tile");
+
+    static constexpr unsigned int numThreads = Size;
+    static constexpr unsigned int numWarps = Size / details::warp_size;
+
 public:
-    using thread_block_tile_base<Size>::thread_rank;
-    using thread_block_tile_base<Size>::num_threads;
-    using thread_block_tile_base<Size>::size;
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline void sync() const;
+    __SIMT_DEVICE_FUNCTIONS_DECL__ static inline unsigned long long thread_rank();
+    __SIMT_DEVICE_FUNCTIONS_DECL__ static constexpr inline unsigned long long num_threads();
+    __SIMT_DEVICE_FUNCTIONS_DECL__ static constexpr inline unsigned long long size();
+
+    template <typename T>
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline T shfl(T var, int src_rank) const;
+
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline int any(int predicate) const;
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline int all(int predicate) const;
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline uint64_t _get_tile_memory() const { return _tile_memory; }
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline details::tile_memory_type _get_tile_memory_type() const
+    {
+        return _tile_memory_type;
+    }
+
+protected:
+    uint64_t _tile_memory;
+    details::tile_memory_type _tile_memory_type;
+
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline multi_warp_thread_block_tile_base(
+        uint64_t tile_memory, details::tile_memory_type memory_type);
+
+    template <details::tile_memory_type MemoryType>
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline details::tile_memory_pointer_t<
+        MemoryType, details::multi_warp_scratch::barrier_t>
+    get_sync_location() const;
+
+    template <details::tile_memory_type MemoryType, typename T>
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline details::tile_memory_pointer_t<MemoryType, T> get_scratch_location(
+        unsigned int warp_id) const;
+
+    template <details::tile_memory_type MemoryType, typename T>
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline details::tile_memory_pointer_t<MemoryType, T> get_scratch_location() const;
+
+private:
+    template <details::tile_memory_type MemoryType>
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline void sync_impl() const;
+
+    template <details::tile_memory_type MemoryType, typename T>
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline T shfl_impl(T var, int src_rank) const;
+
+    template <details::tile_memory_type MemoryType>
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline int any_impl(int predicate) const;
+
+    template <details::tile_memory_type MemoryType>
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline int all_impl(int predicate) const;
+};
+
+template <unsigned int Size, typename ParentT = void, bool IsMultiWarp = _is_multi_warp<Size>::value>
+class thread_block_tile_impl;
+
+template <unsigned int Size, typename ParentT>
+class thread_block_tile_impl<Size, ParentT, false> : public single_warp_thread_block_tile_base<Size>,
+                                                     public _static_parent_thread_block_tile_base<Size, ParentT> {
+public:
+    using single_warp_thread_block_tile_base<Size>::thread_rank;
+    using single_warp_thread_block_tile_base<Size>::num_threads;
+    using single_warp_thread_block_tile_base<Size>::size;
 
 protected:
     __SIMT_DEVICE_FUNCTIONS_DECL__ inline thread_block_tile_impl();
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline thread_block_tile_impl(const ParentT&);
     __SIMT_DEVICE_FUNCTIONS_DECL__ inline thread_block_tile_impl(unsigned int, unsigned int);
 };
 
 template <unsigned int Size>
-class thread_block_tile_impl<Size, void> : public thread_block_tile_base<Size>, public tiled_group {
+class thread_block_tile_impl<Size, void, false> : public single_warp_thread_block_tile_base<Size>, public tiled_group {
 public:
-    using thread_block_tile_base<Size>::sync;
-    using thread_block_tile_base<Size>::thread_rank;
-    using thread_block_tile_base<Size>::num_threads;
-    using thread_block_tile_base<Size>::size;
+    using single_warp_thread_block_tile_base<Size>::sync;
+    using single_warp_thread_block_tile_base<Size>::thread_rank;
+    using single_warp_thread_block_tile_base<Size>::num_threads;
+    using single_warp_thread_block_tile_base<Size>::size;
     __SIMT_DEVICE_FUNCTIONS_DECL__ inline unsigned int meta_group_rank() const;
     __SIMT_DEVICE_FUNCTIONS_DECL__ inline unsigned int meta_group_size() const;
 
 protected:
     __SIMT_DEVICE_FUNCTIONS_DECL__ inline thread_block_tile_impl(
         unsigned int meta_group_rank = 0, unsigned int meta_group_size = 1);
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline thread_block_tile_impl(
+        uint64_t, details::tile_memory_type, unsigned int meta_group_rank, unsigned int meta_group_size);
+};
+
+template <unsigned int Size, typename ParentT>
+class thread_block_tile_impl<Size, ParentT, true> : public multi_warp_thread_block_tile_base<Size>,
+                                                    public _static_parent_thread_block_tile_base<Size, ParentT> {
+public:
+    using multi_warp_thread_block_tile_base<Size>::sync;
+    using multi_warp_thread_block_tile_base<Size>::thread_rank;
+    using multi_warp_thread_block_tile_base<Size>::num_threads;
+    using multi_warp_thread_block_tile_base<Size>::size;
+    using multi_warp_thread_block_tile_base<Size>::shfl;
+    using multi_warp_thread_block_tile_base<Size>::any;
+    using multi_warp_thread_block_tile_base<Size>::all;
+
+protected:
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline thread_block_tile_impl(const ParentT& g);
+};
+
+template <unsigned int Size>
+class thread_block_tile_impl<Size, void, true> : public multi_warp_thread_block_tile_base<Size>, public tiled_group {
+public:
+    using multi_warp_thread_block_tile_base<Size>::sync;
+    using multi_warp_thread_block_tile_base<Size>::thread_rank;
+    using multi_warp_thread_block_tile_base<Size>::num_threads;
+    using multi_warp_thread_block_tile_base<Size>::size;
+    using multi_warp_thread_block_tile_base<Size>::shfl;
+    using multi_warp_thread_block_tile_base<Size>::any;
+    using multi_warp_thread_block_tile_base<Size>::all;
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline unsigned int meta_group_rank() const;
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline unsigned int meta_group_size() const;
+
+protected:
+    __SIMT_DEVICE_FUNCTIONS_DECL__ inline thread_block_tile_impl(
+        uint64_t tile_memory, details::tile_memory_type memory_type, unsigned int meta_group_rank = 0,
+        unsigned int meta_group_size = 1);
 };
 
 template <unsigned int Size, typename ParentT = void>

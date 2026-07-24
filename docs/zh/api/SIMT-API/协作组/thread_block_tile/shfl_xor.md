@@ -48,7 +48,8 @@ T shfl_xor(T var, unsigned int lane_mask) const
 
 ## 约束说明
 
-`lane_mask`必须小于`thread_block_tile`组内线程数。
+- 仅支持`thread_block_tile`的模板参数`Size`小于等于32的场景，即仅支持单Warp内线程子组。
+- `lane_mask`必须小于`thread_block_tile`组内线程数。
 
 ## 调用示例
 

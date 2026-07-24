@@ -24,7 +24,7 @@
 
 ## 功能说明
 
-`tiled_partition` API用于将一个线程组划分为多个更小、固定大小的子组，以便线程在以更精细的粒度上进行协作。提供模板和非模板两个版本的接口，分别用于编译时确定划分大小以及运行时确定划分大小的场景。
+`tiled_partition` API用于将一个线程组划分为多个更小、固定大小的子组，以便线程在以更精细的粒度上进行协作。提供模板和非模板两个版本的接口，分别用于编译时确定划分大小以及运行时确定划分大小的场景。模板版本支持创建跨Warp的`thread_block_tile`。
 
 ## 函数原型
 
@@ -67,7 +67,9 @@ coalesced_group tiled_partition(const coalesced_group& parent, unsigned int tile
 
 ## 约束说明
 
-- `Size`必须是$2^n$，并且必须小于等于32（warpSize），当前可选值范围：1、2、4、8、16、32。
+- 模板版本中，`Size`必须是$2^n$，当前可选值范围：1、2、4、8、16、32、64、128、256、512、1024、2048。
+- 非模板版本仅支持创建`Size <= 32`的子组。
+- 当要创建跨Warp的`thread_block_tile`时，用户需创建[block_tile_memory](./thread_block/thread_block构造函数.md#block_tile_memory说明)作为临时存储，并通过带`scratch`参数的`this_thread_block`创建父`thread_block`。传入的`block_tile_memory`对象必须位于Global Memory或Unified Buffer，不能传入栈空间中创建的对象。使用位于Unified Buffer的对象性能优于位于Global Memory的。
 - 对于模板版本的接口，父组中的线程数必须能被`Size`整除。并且如果父组是`thread_block_tile`，则`Size`必须小于父组大小。
 
 ## 调用示例
@@ -79,8 +81,14 @@ coalesced_group tiled_partition(const coalesced_group& parent, unsigned int tile
     __global__ void simt_kernel(...)
     {
         ...
+        // 无需使用跨warp的thread_block_tile
         thread_block block = this_thread_block();
         auto tile4 = tiled_partition<4>(block);
+
+        // 需要使用跨warp的thread_block_tile
+        __ubuf__ block_tile_memory<1024> scratch;
+        thread_block block_with_memory = this_thread_block(scratch);
+        auto tile64 = tiled_partition<64>(block_with_memory);
         ...
     }
     ```
@@ -92,8 +100,14 @@ coalesced_group tiled_partition(const coalesced_group& parent, unsigned int tile
     __simt_vf__ inline void simt_kernel(...)
     {
         ...
+        // 无需使用跨warp的thread_block_tile
         thread_block block = this_thread_block();
         auto tile4 = tiled_partition<4>(block);
+
+        // 需要使用跨warp的thread_block_tile
+        __ubuf__ block_tile_memory<1024> scratch;
+        thread_block block_with_memory = this_thread_block(scratch);
+        auto tile64 = tiled_partition<64>(block_with_memory);
         ...
     }
     ```

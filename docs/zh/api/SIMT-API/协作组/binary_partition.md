@@ -52,7 +52,7 @@ coalesced_group binary_partition(const thread_block_tile<Size, ParentT>& g, bool
 
 ## 约束说明
 
-无
+- 当`g`为`thread_block_tile<Size, ParentT>`类型时，`g`必须满足`Size`小于等于32，否则编译报错。
 
 ## 调用示例
 

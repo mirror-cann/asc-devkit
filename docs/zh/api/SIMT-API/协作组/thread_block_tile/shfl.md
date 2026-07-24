@@ -24,7 +24,7 @@
 
 ## 功能说明
 
-`thread_block_tile`组内线程的数据交换接口，不通过共享内存实现直接读取组内指定线程的寄存器中的值。
+`thread_block_tile`组内线程的数据交换接口，用于获取组内指定rank线程输入的`var`值。
 
 ## 函数原型
 
@@ -49,7 +49,9 @@ T shfl(T var, int src_rank) const
 
 ## 约束说明
 
-无
+- 在跨Warp的`thread_block_tile`场景（Size>32）下
+    - 必须保证`thread_block_tile`组内线程指定相同的`src_rank`，否则是未定义行为。
+    - 必须保证`thread_block_tile`组内线程均处于活跃状态，否则是未定义行为。
 
 ## 调用示例
 

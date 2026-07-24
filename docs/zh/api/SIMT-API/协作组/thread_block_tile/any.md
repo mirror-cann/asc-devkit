@@ -46,7 +46,7 @@ int any(int predicate) const
 
 ## 约束说明
 
-无
+- 当`thread_block_tile`的模板参数`Size`大于32时，即`Size`为64、128、256、512、1024、2048的跨Warp协作组场景，必须保证`thread_block_tile`组内所有线程均处于活跃状态，否则是未定义行为。
 
 ## 调用示例
 
