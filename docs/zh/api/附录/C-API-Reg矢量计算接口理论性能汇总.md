@@ -51,11 +51,43 @@ Ascend 950PR/Ascend 950DT
 | asc_mul_scalar | int32_t | int32_t | 32 |
 | asc_mul_scalar | uint32_t | uint32_t | 32 |
 | asc_mul_scalar | float | float | 64 |
+| asc_neg | int8_t | int8_t | 128 |
+| asc_neg | int16_t | int16_t | 64 |
+| asc_neg | half | half | 128 |
+| asc_neg | int32_t | int32_t | 32 |
+| asc_neg | float | float | 64 |
 | asc_relu | half | half | 128 |
 | asc_relu | int32_t | int32_t | 64 |
 | asc_relu | float | float | 64 |
 
-**表2**  复合计算
+**表2**  逻辑算术
+
+| 接口 | 源操作数数据类型 | 目的操作数数据类型 | 理论并行度（element/cycle） |
+| -------- | ---------------- | ---------------- | ---------------- |
+| asc_and | bool | bool | 128 |
+| asc_and | int8_t | int8_t | 256 |
+| asc_and | uint8_t | uint8_t | 256 |
+| asc_and | fp8_e5m2_t | fp8_e5m2_t | 256 |
+| asc_and | fp8_e4m3fn_t | fp8_e4m3fn_t | 256 |
+| asc_and | int16_t | int16_t | 128 |
+| asc_and | uint16_t | uint16_t | 128 |
+| asc_and | half | half | 128 |
+| asc_and | bfloat16_t | bfloat16_t | 128 |
+| asc_and | int32_t | int32_t | 64 |
+| asc_and | uint32_t | uint32_t | 64 |
+| asc_and | float | float | 64 |
+| asc_or | bool | bool | 128 |
+| asc_or | int8_t | int8_t | 256 |
+| asc_or | uint8_t | uint8_t | 256 |
+| asc_or | int16_t | int16_t | 128 |
+| asc_or | uint16_t | uint16_t | 128 |
+| asc_or | half | half | 128 |
+| asc_or | bfloat16_t | bfloat16_t | 128 |
+| asc_or | int32_t | int32_t | 64 |
+| asc_or | uint32_t | uint32_t | 64 |
+| asc_or | float | float | 64 |
+
+**表3**  复合计算
 
 | 接口 | 源操作数数据类型 | 目的操作数数据类型 | 理论并行度（element/cycle） |
 | -------- | ---------------- | ---------------- | ---------------- |
@@ -64,10 +96,28 @@ Ascend 950PR/Ascend 950DT
 | asc_axpy | half | half | 128 |
 | asc_axpy | float | float | 64 |
 
-**表3**  比较与选择
+**表4**  比较与选择
 
 | 接口 | 源操作数数据类型 | 目的操作数数据类型 | 理论并行度（element/cycle） |
 | -------- | ---------------- | ---------------- | ---------------- |
+| asc_eq | int8_t | bool | 256 |
+| asc_eq | uint8_t | bool | 256 |
+| asc_eq | int16_t | bool | 128 |
+| asc_eq | uint16_t | bool | 128 |
+| asc_eq | half | bool | 128 |
+| asc_eq | bfloat16_t | bool | 128 |
+| asc_eq | int32_t | bool | 64 |
+| asc_eq | uint32_t | bool | 64 |
+| asc_eq | float | bool | 64 |
+| asc_ge | int8_t | bool | 256 |
+| asc_ge | uint8_t | bool | 256 |
+| asc_ge | int16_t | bool | 128 |
+| asc_ge | uint16_t | bool | 128 |
+| asc_ge | half | bool | 128 |
+| asc_ge | bfloat16_t | bool | 128 |
+| asc_ge | int32_t | bool | 64 |
+| asc_ge | uint32_t | bool | 64 |
+| asc_ge | float | bool | 64 |
 | asc_ge_scalar | int8_t | bool | 256 |
 | asc_ge_scalar | uint8_t | bool | 256 |
 | asc_ge_scalar | int16_t | bool | 128 |
@@ -77,6 +127,15 @@ Ascend 950PR/Ascend 950DT
 | asc_ge_scalar | int32_t | bool | 64 |
 | asc_ge_scalar | uint32_t | bool | 64 |
 | asc_ge_scalar | float | bool | 64 |
+| asc_gt | int8_t | bool | 256 |
+| asc_gt | uint8_t | bool | 256 |
+| asc_gt | int16_t | bool | 128 |
+| asc_gt | uint16_t | bool | 128 |
+| asc_gt | half | bool | 128 |
+| asc_gt | bfloat16_t | bool | 128 |
+| asc_gt | int32_t | bool | 64 |
+| asc_gt | uint32_t | bool | 64 |
+| asc_gt | float | bool | 64 |
 | asc_gt_scalar | int8_t | bool | 256 |
 | asc_gt_scalar | uint8_t | bool | 256 |
 | asc_gt_scalar | int16_t | bool | 128 |
@@ -86,6 +145,24 @@ Ascend 950PR/Ascend 950DT
 | asc_gt_scalar | int32_t | bool | 64 |
 | asc_gt_scalar | uint32_t | bool | 64 |
 | asc_gt_scalar | float | bool | 64 |
+| asc_lt | int8_t | bool | 256 |
+| asc_lt | uint8_t | bool | 256 |
+| asc_lt | int16_t | bool | 128 |
+| asc_lt | uint16_t | bool | 128 |
+| asc_lt | half | bool | 128 |
+| asc_lt | bfloat16_t | bool | 128 |
+| asc_lt | int32_t | bool | 64 |
+| asc_lt | uint32_t | bool | 64 |
+| asc_lt | float | bool | 64 |
+| asc_ne | int8_t | bool | 256 |
+| asc_ne | uint8_t | bool | 256 |
+| asc_ne | int16_t | bool | 128 |
+| asc_ne | uint16_t | bool | 128 |
+| asc_ne | half | bool | 128 |
+| asc_ne | bfloat16_t | bool | 128 |
+| asc_ne | int32_t | bool | 64 |
+| asc_ne | uint32_t | bool | 64 |
+| asc_ne | float | bool | 64 |
 | asc_ne_scalar | int8_t | bool | 256 |
 | asc_ne_scalar | uint8_t | bool | 256 |
 | asc_ne_scalar | int16_t | bool | 128 |
@@ -109,7 +186,7 @@ Ascend 950PR/Ascend 950DT
 | asc_select | uint32_t | uint32_t | 64 |
 | asc_select | float | float | 64 |
 
-**表4**  类型转换
+**表5**  类型转换
 
 | 接口 | 源操作数数据类型 | 目的操作数数据类型 | 理论并行度（element/cycle） |
 | -------- | ---------------- | ---------------- | ---------------- |
@@ -118,7 +195,7 @@ Ascend 950PR/Ascend 950DT
 | asc_int322int64 | int32_t | int64_t | 32 |
 | asc_int322uint16 | int32_t | uint16_t | 64 |
 
-**表5**  归约计算
+**表6**  归约计算
 
 | 接口 | 源操作数数据类型 | 目的操作数数据类型 | 理论并行度（element/cycle） |
 | -------- | ---------------- | ---------------- | ---------------- |
@@ -158,3 +235,10 @@ Ascend 950PR/Ascend 950DT
 | asc_reduce_sum_datablock | int32_t | int32_t | 64 |
 | asc_reduce_sum_datablock | uint32_t | uint32_t | 64 |
 | asc_reduce_sum_datablock | float | float | 64 |
+
+**表7**  直方图计算
+
+| 接口 | 源操作数数据类型 | 目的操作数数据类型 | 理论并行度（element/cycle） |
+| -------- | ---------------- | ---------------- | ---------------- |
+| asc_cumulative_histogram_bin0 | uint8_t | uint16_t | 64 |
+| asc_cumulative_histogram_bin1 | uint8_t | uint16_t | 64 |

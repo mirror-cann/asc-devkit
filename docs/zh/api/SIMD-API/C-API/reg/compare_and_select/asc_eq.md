@@ -28,10 +28,12 @@
 
 头文件路径：`"c_api/reg_compute/reg_vector.h"`。
 
-对源操作数逐元素比较是否相等。对于src0 == src1，若条件成立则目的操作数对应结果位为1，否则为0，每个元素的比较结果占一个bit。计算公式如下：
+eq（equal to），该接口用于对两个源操作数执行逐元素相等比较。当src0_i == src1_i时，目的操作数对应结果位为1，否则为0，每个元素的比较结果占一个bit。
+
+计算公式如下：
 
 $$
-dst_i = src0_i == src1_i
+dst_i = (src0_i == src1_i)
 $$
 
 ## 函数原型
@@ -50,6 +52,8 @@ __simd_callee__ inline void asc_eq(vector_bool& dst, vector_float src0, vector_f
 
 ## 参数说明
 
+**表1** 参数说明
+
 | 参数名  | 输入/输出 | 描述 |
 | :----- | :------- | :------- |
 | dst | 输出 | 目的操作数（掩码寄存器）。 |
@@ -63,13 +67,11 @@ __simd_callee__ inline void asc_eq(vector_bool& dst, vector_float src0, vector_f
 
 无
 
-## 流水类型
-
-PIPE_V
-
 ## 约束说明
 
-无
+- 通过mask参数控制的未选中元素在目的操作数中被置零。
+- 操作数重叠约束：src0和src1可以是同一个矢量数据寄存器。
+- 当源操作数为浮点类型时，+0与-0视为相等。
 
 ## 调用示例
 

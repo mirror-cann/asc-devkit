@@ -28,23 +28,30 @@
 
 头文件路径：`"c_api/reg_compute/reg_vector.h"`。
 
-按元素判断src0_i != src1_i是否成立，若成立则输出结果为1，否则为0。每个元素的比较结果占1个bit。
+ne（not equal），该接口用于对两个源操作数执行逐元素不等于比较。当src0_i != src1_i时，目的操作数对应结果位为1，否则为0，每个元素的比较结果占一个bit。
+
+计算公式如下：
+
+$$
+dst_i = (src0_i \neq src1_i)
+$$
 
 ## 函数原型
 
-
 ```cpp
-__simd_callee__ inline void asc_ne(vector_bool& dst, vector_uint8_t src0, vector_uint8_t src1, vector_bool mask)
 __simd_callee__ inline void asc_ne(vector_bool& dst, vector_int8_t src0, vector_int8_t src1, vector_bool mask)
-__simd_callee__ inline void asc_ne(vector_bool& dst, vector_uint16_t src0, vector_uint16_t src1, vector_bool mask)
+__simd_callee__ inline void asc_ne(vector_bool& dst, vector_uint8_t src0, vector_uint8_t src1, vector_bool mask)
 __simd_callee__ inline void asc_ne(vector_bool& dst, vector_int16_t src0, vector_int16_t src1, vector_bool mask)
-__simd_callee__ inline void asc_ne(vector_bool& dst, vector_uint32_t src0, vector_uint32_t src1, vector_bool mask)
-__simd_callee__ inline void asc_ne(vector_bool& dst, vector_int32_t src0, vector_int32_t src1, vector_bool mask)
+__simd_callee__ inline void asc_ne(vector_bool& dst, vector_uint16_t src0, vector_uint16_t src1, vector_bool mask)
 __simd_callee__ inline void asc_ne(vector_bool& dst, vector_half src0, vector_half src1, vector_bool mask)
+__simd_callee__ inline void asc_ne(vector_bool& dst, vector_int32_t src0, vector_int32_t src1, vector_bool mask)
+__simd_callee__ inline void asc_ne(vector_bool& dst, vector_uint32_t src0, vector_uint32_t src1, vector_bool mask)
 __simd_callee__ inline void asc_ne(vector_bool& dst, vector_float src0, vector_float src1, vector_bool mask)
 ```
 
 ## 参数说明
+
+**表1** 参数说明
 
 |参数名|输入/输出|描述|
 | ------------ | ------------ | ------------ |
@@ -59,14 +66,10 @@ __simd_callee__ inline void asc_ne(vector_bool& dst, vector_float src0, vector_f
 
 无
 
-## 流水类型
-
-PIPE_V
-
 ## 约束说明
 
-无
-
+- 通过mask参数控制的未选中元素在目的操作数中被置零。
+- 操作数重叠约束：src0和src1可以是同一个矢量数据寄存器。
 
 ## 调用示例
 
