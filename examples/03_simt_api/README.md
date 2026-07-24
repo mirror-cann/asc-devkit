@@ -5,6 +5,7 @@
 | [01_utilities](./01_utilities) | 基于Ascend C SIMT的调试调优样例，通过printf、assert、clock等API介绍上板打印、打点、CPU孪生调试等系统工具使用方法，适用于调试阶段。 |
 | [02_features](./02_features) | 展示Ascend C SIMT编程的重点特性的样例，包含基础编程、内存资源管理、线程同步、原子操作等特性。 |
 | [03_best_practices](./03_best_practices) | 展示Ascend C SIMT编程的最佳实践。 |
+| [05_troubleshooting](./05_troubleshooting) | 展示Ascend C SIMT编程的故障分析与问题定位样例。 |
 
 ## npu-arch编译选项说明
 

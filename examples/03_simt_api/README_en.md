@@ -5,6 +5,7 @@
 | [01_utilities](./01_utilities) | Debugging and tuning examples based on Ascend C SIMT, introducing system tool usage methods such as on-board printing, timing, and CPU twin debugging through printf, assert, clock and other APIs, suitable for debugging phase. |
 | [02_features](./02_features) | Examples demonstrating key features of Ascend C SIMT programming, including basic programming, memory resource management, thread synchronization, atomic operations, and other features. |
 | [03_best_practices](./03_best_practices) | Demonstrating best practices for Ascend C SIMT programming. |
+| [05_troubleshooting](./05_troubleshooting) | Examples demonstrating fault analysis and issue localization for Ascend C SIMT programming. |
 
 ## npu-arch Build Option Description
 
