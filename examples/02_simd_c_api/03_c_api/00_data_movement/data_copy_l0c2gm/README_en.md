@@ -2,9 +2,9 @@
 
 ## Overview
 
-This example uses the Ascend C C API to move matrix-multiplication results from L0C to GM. It performs scalar or vector quantization, ReLU activation, and NZ2ND conversion during the writeback. The ND-format input matrices A and B are converted to Nz while moved from GM to L1, then processed through L0A/L0B by two K-axis matrix-multiplication chunks.
+This example uses the Ascend C C API to move matrix-multiplication results from L0C Buffer to GM (Global Memory) through Fixpipe. It performs scalar or vector quantization, ReLU activation, and NZ2ND conversion during the movement. The ND-format input matrices A and B are converted to Nz while moved from GM to L1 Buffer, then processed through L0A Buffer and L0B Buffer by two K-axis matrix-multiplication chunks.
 
-This example supports Ascend 950PR/Ascend 950DT (`dav-3510`) only. It supports NPU execution and NPU simulation; CPU debug mode is not provided.
+This example applies to Ascend 950PR/Ascend 950DT (`dav-3510`) and can run in NPU execution or NPU simulation mode. CPU debug mode is not provided.
 
 ## Supported Products and CANN Versions
 
@@ -39,9 +39,9 @@ Use the `SCENARIO_NUM` build parameter to select a scenario. Every scenario uses
 | 5 | int8_t | int32_t | int8_t, ND | Scalar `REQ8` | No | Yes |
 | 6 | int8_t | int32_t | int8_t, Nz | Vector `VREQ8` | Yes | No |
 
-`SCENARIO_NUM` is passed by CMake as a compile-time macro. The kernel selects the corresponding scenario with `if constexpr`; rerun CMake and rebuild after changing the scenario.
+`SCENARIO_NUM` is passed by CMake as a compile-time macro. The kernel selects the corresponding scenario with `if constexpr`. After changing the scenario, recompile the project.
 
-The device-side flow is as follows. Each K chunk follows `GM→L1 (MTE2)→L0A/L0B (MTE1)→Mmad (M)`. `MTE1→MTE2` and `M→MTE1` protect L1, L0A, and L0B reuse for the next chunk. The final Fixpipe writeback only waits on `M→FIX` after Mmad completes; no `PIPE_ALL` synchronization is used.
+The device-side flow is as follows. Each K chunk follows `GM→L1 Buffer (MTE2)→L0A Buffer/L0B Buffer (MTE1)→Mmad (M)`. `MTE1→MTE2` and `M→MTE1` protect L1 Buffer, L0A Buffer, and L0B Buffer reuse for the next chunk. The final `M→FIX` dependency ensures that Fixpipe moves the L0C Buffer result to GM after Mmad completes. `asc_sync_pipe(PIPE_ALL)` is called at the end of the kernel to ensure that all pipelines complete.
 
 **Scenario 1: int8 input, scalar dequantization, and ND half output**
 
@@ -79,7 +79,7 @@ The device-side flow is as follows. Each K chunk follows `GM→L1 (MTE2)→L0A/L
 - Output: C `[128, 256]` in Nz `int8_t`
 - Implementation: Use `VREQ8` and enable ReLU
 
-For scenarios 2, 4, and 6, the parameters are moved from GM to L1 with `asc_copy_gm2l1`, then from L1 to Fixpipe Buffer with `asc_copy_l12fb`. `asc_set_l0c2gm_config` configures the vector-quantization parameter address. Its parameter address is expressed in 128B units, so the parameter file must be rounded up to 128B and any padding must be zero-filled. The `[256] uint64_t` parameters in this example occupy 2048B and already meet this requirement. Moving these parameters from L1 to Fixpipe Buffer transfers 2048B of data in 64B data blocks, so `len_burst` in `asc_copy_l12fb` is set to 32. `asc_sync_pipe(PIPE_FIX)` completes the L1-to-Fixpipe Buffer movement and parameter configuration before the final Fixpipe writeback.
+For scenarios 2, 4, and 6, the parameters are moved from GM to L1 Buffer with `asc_copy_gm2l1`, then from L1 Buffer to Fixpipe Buffer with `asc_copy_l12fb`. `asc_set_l0c2gm_config` configures the vector-quantization parameter address. Its parameter address is expressed in 128B units, so the parameter file must be rounded up to 128B and any padding must be zero-filled. The `[256] uint64_t` parameters in this example occupy 2048B and already meet this requirement. Moving these parameters from L1 Buffer to Fixpipe Buffer transfers 2048B of data in 64B data blocks, so `len_burst` in `asc_copy_l12fb` is set to 32. `asc_sync_pipe(PIPE_FIX)` completes the L1 Buffer-to-Fixpipe Buffer movement and parameter configuration before Fixpipe moves the L0C Buffer result to GM.
 
 ## Build and Run
 

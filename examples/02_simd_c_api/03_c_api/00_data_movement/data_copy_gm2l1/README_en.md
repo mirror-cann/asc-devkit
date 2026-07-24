@@ -2,9 +2,9 @@
 
 ## Overview
 
-This example shows how to use the Ascend C C API to move input data from GM (Global Memory) to the L1 Buffer. It supports Nz, ND, and DN input formats and vector-quantization parameter movement. After the input is moved, the example performs L1-to-L0A and L1-to-L0B movement, matrix multiplication, and L0C-to-GM result writeback.
+This example shows how to use the Ascend C C API to move input data from GM (Global Memory) to L1 Buffer. It supports Nz, ND, and DN input formats and vector-quantization parameter movement. After the input is moved, the example moves data from L1 Buffer to L0A Buffer and L0B Buffer, performs matrix multiplication, and uses Fixpipe to move the L0C Buffer result to GM (Global Memory).
 
-This example supports Ascend 950PR/Ascend 950DT (`dav-3510`) only. It supports NPU execution and NPU simulation; CPU debug mode is not provided.
+This example applies to Ascend 950PR/Ascend 950DT (`dav-3510`) and can run in NPU execution or NPU simulation mode. CPU debug mode is not provided.
 
 ## Supported Products and CANN Versions
 
@@ -31,19 +31,18 @@ This example supports Ascend 950PR/Ascend 950DT (`dav-3510`) only. It supports N
 
 Use the `SCENARIO_NUM` build parameter to select an input scenario. The meaning of each value is shown below. All scenarios use the same matrix multiplication shape: [M, K, N] = [128, 128, 256]. The kernel is named `data_copy_gm2l1`.
 
-<table>
-<caption style="font-weight: normal;">
-         <span style="font-weight: bold; font-size: 1.2em;">📌 Table 1: SCENARIO_NUM values</span></caption>
-<tr><td rowspan="1" align="center">SCENARIO_NUM</td><td align="center">Input format</td><td align="center">Input type</td><td align="center">Output type</td><td align="center">Vector quantization enabled</td></tr>
-<tr><td align="center">1</td><td align="center">Nz</td><td align="center">half</td><td align="center">float</td><td align="center">No</td></tr>
-<tr><td align="center">2</td><td align="center">ND</td><td align="center">half</td><td align="center">float</td><td align="center">No</td></tr>
-<tr><td align="center">3</td><td align="center">DN</td><td align="center">half</td><td align="center">float</td><td align="center">No</td></tr>
-<tr><td align="center">4</td><td align="center">ND</td><td align="center">half</td><td align="center">int8_t</td><td align="center">Yes</td></tr>
-</table>
+**Table 1: SCENARIO_NUM Values**
 
-`SCENARIO_NUM` is passed by CMake as a compile-time macro. The kernel selects the corresponding scenario with `if constexpr`; rerun CMake and rebuild after changing the scenario.
+| SCENARIO_NUM | Input format | Input type | Output type | Vector quantization enabled |
+|---|---|---|---|---|
+| 1 | Nz | half | float | No |
+| 2 | ND | half | float | No |
+| 3 | DN | half | float | No |
+| 4 | ND | half | int8_t | Yes |
 
-All device-side movement and compute use asynchronous C API calls. `asc_sync_notify` and `asc_sync_wait` establish only the required `MTE2→MTE1→M→FIX` dependencies; scenario 4 also uses `MTE2→FIX` to make the quantization parameters ready, then uses `asc_sync_pipe(PIPE_FIX)` after the L1-to-Fixpipe Buffer transfer before the final Fixpipe writeback. No `PIPE_ALL` synchronization is used.
+`SCENARIO_NUM` is passed by CMake as a compile-time macro. The kernel selects the corresponding scenario with `if constexpr`. After changing the scenario, recompile the project.
+
+All device-side movement and compute use asynchronous Ascend C C API calls. `asc_sync_notify` and `asc_sync_wait` establish the required `MTE2→MTE1→M→FIX` dependencies; scenario 4 also uses `MTE2→FIX` to make the quantization parameters ready, then uses `asc_sync_pipe(PIPE_FIX)` after the L1 Buffer-to-Fixpipe Buffer transfer before Fixpipe moves the L0C Buffer result to GM. `asc_sync_pipe(PIPE_ALL)` is called at the end of the kernel to ensure that all pipelines complete.
 
 **Scenario 1: Nz input, half input type**
 
@@ -131,7 +130,7 @@ Run the following steps in the example root directory to build and execute the e
 
 - Expected result
 
-  For scenarios 1-3, the floating-point result must satisfy the accepted tolerance. For scenario 4, the int8 result must exactly match the golden data. In either case, successful verification prints:
+  For scenarios 1-3, the floating-point result must satisfy the accepted tolerance. For scenario 4, the int8_t result must exactly match the golden data. In either case, successful verification prints:
 
   ```bash
   test pass!

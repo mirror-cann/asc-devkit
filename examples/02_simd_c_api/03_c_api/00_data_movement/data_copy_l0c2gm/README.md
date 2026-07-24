@@ -2,9 +2,9 @@
 
 ## 概述
 
-本样例演示如何使用Ascend C C API将矩阵乘计算结果从L0C搬运到GM，并在搬出过程中完成标量/Vector量化、ReLU激活和NZ2ND格式转换。输入矩阵A和B均为ND格式，先从GM搬运到L1并转换为Nz格式，再经L0A/L0B完成两次K轴分块矩阵乘。
+本样例演示如何使用Ascend C C API，通过Fixpipe将矩阵乘计算结果从L0C Buffer搬运到GM（Global Memory），并在搬运过程中完成标量/Vector量化、ReLU激活和NZ2ND格式转换。输入矩阵A和B均为ND格式，先从GM搬运到L1 Buffer并转换为Nz格式，再经L0A Buffer和L0B Buffer完成两次K轴分块矩阵乘。
 
-本样例仅支持Ascend 950PR/Ascend 950DT（`dav-3510`），支持NPU运行和NPU仿真模式，不提供CPU Debug模式。
+本样例适用于Ascend 950PR/Ascend 950DT（`dav-3510`），可在NPU运行模式或NPU仿真模式下执行，不提供CPU域调试模式。
 
 ## 本样例支持的产品及CANN软件版本
 
@@ -39,9 +39,9 @@ data_copy_l0c2gm
 | 5 | int8_t | int32_t | int8_t，ND | 标量`REQ8` | 否 | 是 |
 | 6 | int8_t | int32_t | int8_t，Nz | Vector `VREQ8` | 是 | 否 |
 
-`SCENARIO_NUM`由CMake作为编译期宏传入，内核通过`if constexpr`选择对应场景。切换场景后需要重新执行CMake并编译。
+`SCENARIO_NUM`由CMake作为编译期宏传入，内核通过`if constexpr`选择对应场景。切换场景后，需要重新编译。
 
-设备侧数据流如下：每个K轴分块按照`GM→L1（MTE2）→L0A/L0B（MTE1）→Mmad（M）`执行；`MTE1→MTE2`和`M→MTE1`仅用于保护下一轮分块对L1、L0A和L0B的复用。最终仅建立`M→FIX`依赖，使Fixpipe在Mmad完成后搬出L0C结果，不使用`PIPE_ALL`同步。
+设备侧数据流如下：每个K轴分块按照`GM→L1 Buffer（MTE2）→L0A Buffer/L0B Buffer（MTE1）→Mmad（M）`执行；`MTE1→MTE2`和`M→MTE1`仅用于保护下一轮分块对L1 Buffer、L0A Buffer和L0B Buffer的复用。最终建立`M→FIX`依赖，使Fixpipe在Mmad完成后将L0C Buffer中的计算结果搬运到GM（Global Memory）；核函数结束时调用`asc_sync_pipe(PIPE_ALL)`，确保全部流水完成。
 
 **场景1：int8输入、标量反量化并输出ND half**
 
@@ -79,7 +79,7 @@ data_copy_l0c2gm
 - 输出：C `[128, 256]`，Nz格式`int8_t`
 - 实现：使用`VREQ8`模式并启用ReLU
 
-对于场景2、4和6，量化参数先通过`asc_copy_gm2l1`从GM搬运到L1，再通过`asc_copy_l12fb`搬运到Fixpipe Buffer，最后调用`asc_set_l0c2gm_config`配置Vector量化参数地址。`asc_set_l0c2gm_config`的参数地址以128B为单位，因此参数文件需按128B向上对齐，不足部分补0。本样例的`[256] uint64_t`参数共2048B，已满足要求。量化参数从L1搬运至Fixpipe Buffer时，需要搬运2048B数据，数据搬运单位为64B，对应`asc_copy_l12fb`的`len_burst`配置为32。量化参数从L1搬运至Fixpipe Buffer后，通过`asc_sync_pipe(PIPE_FIX)`确保参数和配置生效，最终执行Fixpipe搬出。
+对于场景2、4和6，量化参数先通过`asc_copy_gm2l1`从GM搬运到L1 Buffer，再通过`asc_copy_l12fb`搬运到Fixpipe Buffer，最后调用`asc_set_l0c2gm_config`配置Vector量化参数地址。`asc_set_l0c2gm_config`的参数地址以128B为单位，因此参数文件需按128B向上对齐，不足部分补0。本样例的`[256] uint64_t`参数共2048B，已满足要求。量化参数从L1 Buffer搬运至Fixpipe Buffer时，需要搬运2048B数据，数据搬运单位为64B，对应`asc_copy_l12fb`的`len_burst`配置为32。量化参数从L1 Buffer搬运至Fixpipe Buffer后，通过`asc_sync_pipe(PIPE_FIX)`确保参数和配置生效，随后通过Fixpipe将L0C Buffer中的计算结果搬运到GM（Global Memory）。
 
 ## 编译运行
 
