@@ -96,6 +96,8 @@ asc_copy_ub2gm_align(output + block_offset, output_buf, 1, blk_length, 0, 0, 0);
 | aiv_mte3_time(μs) | mte3类型指令耗时，主要对应UB到GM的搬运。 |
 | aiv_mte3_ratio | mte3类型指令cycle数在total cycle数中的占用比。 |
 
+除Task Duration外，其余指标均为所有Thread Block上的平均值。
+
 ### Case 0：普通除法版本
 
 **样例目标**：实现基础整数除法功能，作为快速除法版本的耗时对比基线
@@ -116,12 +118,12 @@ uint32_t result = value / divisor;
 
 | Case | 实现方式 | 数据量 | Task Duration(μs) | aiv_time(μs) | aiv_vec_time(μs) | aiv_vec_ratio | aiv_scalar_time(μs) | aiv_scalar_ratio | aiv_mte2_time(μs) | aiv_mte2_ratio | aiv_mte3_time(μs) | aiv_mte3_ratio |
 |:---|:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Case 0 | 普通除法 | 8388608 | 110.167 | 109.110 | 40.685 | 0.373 | 10.701 | 0.098 | 36.229 | 0.332 | 18.678 | 0.171 |
+| Case 0 | 普通除法 | 8388608 | 117.229 | 1.277 | 0.497 | 0.390 | 0.128 | 0.099 | 0.423 | 0.331 | 0.222 | 0.174 |
 
 **性能数据分析**：
 
-- Case 0的 `Task Duration` 为110.167μs，是快速除法版本的对比基线。
-- Case 0的 `aiv_time` 为109.110μs，其中 `aiv_vec_time` 为40.685μs，可作为普通除法版本在AI Vector Core上执行耗时和计算指令耗时的基线。
+- Case 0的 `Task Duration` 为117.229μs，是快速除法版本的对比基线。
+- Case 0的 `aiv_time` 为1.277μs，其中 `aiv_vec_time` 为0.497μs，可作为普通除法版本在AI Vector Core上执行耗时和计算指令耗时的基线。
 
 ---
 
@@ -185,13 +187,13 @@ uint32_t result = (value + q) >> shift;
 
 | Case | 实现方式 | 数据量 | Task Duration(μs) | aiv_time(μs) | aiv_vec_time(μs) | aiv_vec_ratio | aiv_scalar_time(μs) | aiv_scalar_ratio | aiv_mte2_time(μs) | aiv_mte2_ratio | aiv_mte3_time(μs) | aiv_mte3_ratio |
 |:---|:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Case 1 | 快速除法 | 8388608 | 98.235 | 97.350 | 22.497 | 0.231 | 12.707 | 0.131 | 40.026 | 0.411 | 19.513 | 0.200 |
+| Case 1 | 快速除法 | 8388608 | 103.889 | 1.068 | 0.270 | 0.254 | 0.142 | 0.132 | 0.425 | 0.398 | 0.221 | 0.208 |
 
 **性能数据分析**：
 
-- 相比Case 0普通除法版本，Case 1的 `Task Duration` 从110.167μs降低到98.235μs，`aiv_time` 从109.110μs降低到97.350μs，整体执行耗时下降。
-- `aiv_vec_time` 从40.685μs降低到22.497μs，说明将普通除法替换为乘法和移位后，计算指令耗时明显降低。
-- `aiv_scalar_time` 从Case 0的10.701μs增加到12.707μs，这与快速除法场景中额外计算 `magic` 和 `shift` 的标量操作有关；但整体 `Task Duration` 仍然下降，说明快速除法带来的收益可以覆盖这部分开销。
+- 相比Case 0普通除法版本，Case 1的 `Task Duration` 从117.229μs降低到103.889μs，`aiv_time` 从1.277μs降低到1.068μs，整体执行耗时下降。
+- `aiv_vec_time` 从0.497μs降低到0.270μs，说明将普通除法替换为乘法和移位后，计算指令耗时明显降低。
+- `aiv_scalar_time` 从Case 0的0.128μs增加到0.142μs，这与快速除法场景中额外计算 `magic` 和 `shift` 的标量操作有关；但整体 `Task Duration` 仍然下降，说明快速除法带来的收益可以覆盖这部分开销。
 
 ---
 
@@ -201,20 +203,20 @@ uint32_t result = (value + q) >> shift;
 
 **综合优化效果**：
 
-- 通过Case 0到Case 1的快速除法优化，样例 `Task Duration` 从110.167μs降低到98.235μs，耗时下降约10.8%。
-- Case 1相对Case 0性能提升约1.12倍，说明在固定除数场景下，使用乘法和移位替代普通除法可以降低端到端耗时。
+- 通过Case 0到Case 1的快速除法优化，样例 `Task Duration` 从117.229μs降低到103.889μs，耗时下降约11.4%。
+- Case 1相对Case 0性能提升约1.13倍，说明在固定除数场景下，使用乘法和移位替代普通除法可以降低端到端耗时。
 
 | Case | 实现方式 | Task Duration(μs) | aiv_time(μs) | aiv_vec_time(μs) | aiv_vec_ratio | aiv_scalar_time(μs) | aiv_scalar_ratio | aiv_mte2_time(μs) | aiv_mte2_ratio | aiv_mte3_time(μs) | aiv_mte3_ratio |
 |:---|:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Case 0 | 普通除法 | 110.167 | 109.110 | 40.685 | 0.373 | 10.701 | 0.098 | 36.229 | 0.332 | 18.678 | 0.171 |
-| Case 1 | 快速除法 | 98.235 | 97.350 | 22.497 | 0.231 | 12.707 | 0.131 | 40.026 | 0.411 | 19.513 | 0.200 |
+| Case 0 | 普通除法 | 117.229 | 1.277 | 0.497 | 0.390 | 0.128 | 0.099 | 0.423 | 0.331 | 0.222 | 0.174 |
+| Case 1 | 快速除法 | 103.889 | 1.068 | 0.270 | 0.254 | 0.142 | 0.132 | 0.425 | 0.398 | 0.221 | 0.208 |
 
 ### 优化要点总结
 
 | 优化手段 | 核心原理 | 样例体现 |
 |:---|:---|:---|
 | 固定除数预计算 | 当除数在核函数执行期间固定时，可以提前计算 `magic` 和 `shift`，SIMT线程复用该结果完成快速除法。 | Case 1在核函数中调用 `calc_magic_shift()`，SIMT线程内不再直接执行 `/`。 |
-| 乘法和移位替代普通除法 | 普通整数除法指令开销较高，使用乘法和移位操作可降低逐元素计算开销。 | Case 1相比Case 0，`Task Duration` 从110.167μs降低到98.235μs。 |
+| 乘法和移位替代普通除法 | 普通整数除法指令开销较高，使用乘法和移位操作可降低逐元素计算开销。 | Case 1相比Case 0，`Task Duration` 从117.229μs降低到103.889μs。 |
 
 ## 编译运行
 
