@@ -2,7 +2,7 @@
 
 ## Overview
 
-This example demonstrates Cube-Vector (CV) fusion implementation based on the static Tensor programming paradigm, fusing Matmul matrix multiplication with GELU activation function to execute in parallel within the same AI Core. The AIC side completes Matmul computation and outputs results to GM or UB through Fixpipe, while the AIV side reads data from GM or UB to complete GELU vector computation. The Matmul optimization details refer to the [Matmul Basic API Best Practice Example](../../01_matrix_compute/matmul_basic_api_high_performance/README.md), and the GELU optimization details refer to the [Gelu Performance Tuning Example](../../02_reg_compute/gelu_high_performance/README_en.md).
+This example demonstrates Cube-Vector (CV) fusion implementation based on the static Tensor programming paradigm, fusing Matmul matrix multiplication with GELU activation function to execute in parallel within the same AI Core. The AIC side completes Matmul computation and outputs results to GM or UB through Fixpipe, while the AIV side reads data from GM or UB to complete GELU vector computation. The Matmul optimization details refer to the [Matmul Basic API Best Practice Example](../../01_matrix_compute/matmul_basic_api_high_performance/README_en.md), and the GELU optimization details refer to the [Gelu Performance Tuning Example](../../02_reg_compute/gelu_high_performance/README_en.md).
 
 ## Supported Products and CANN Versions
 
@@ -495,7 +495,7 @@ AscendC::DumpTensor(yLocal, 1, 16);
     msopprof ./demo
     ```
 
-    - Performance data description  
+    - Performance data description
       After the command completes, a folder named "OPPROF_{timestamp}_XXX" will be generated in the default directory. The performance data folder structure is as follows:
 
       ```bash

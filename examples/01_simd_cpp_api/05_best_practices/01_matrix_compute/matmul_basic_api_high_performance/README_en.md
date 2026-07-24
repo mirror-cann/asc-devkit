@@ -248,7 +248,7 @@ mmadParams.unitFlag = (kBlockIdx != kLoopCount - 1) ? 2 : 3;  // Enable UnitFlag
 
 L2Cache is the shared external cache for AI Cores, with pure read bandwidth approximately 3 to 4 times that of GM. If data cannot hit L2Cache and needs to access GM, bandwidth utilization efficiency is low, causing MTE2 to become a performance bottleneck.
 
-The specific L2Cache splitting implementation is consistent with Case 6 in the [high-level API Matmul example](../matmul_high_performance/README.md), with the core idea being to split the A matrix along the M axis to make the B matrix reside in L2Cache across rounds. This example implements a dual outer loop through the `ProcessL2Cache()` method, scheduling by `outerMIdx` rounds, with 24 cores computing their respective sub-blocks in parallel within each round:
+The specific L2Cache splitting implementation is consistent with Case 6 in the [high-level API Matmul example](../matmul_high_performance/README_en.md), with the core idea being to split the A matrix along the M axis to make the B matrix reside in L2Cache across rounds. This example implements a dual outer loop through the `ProcessL2Cache()` method, scheduling by `outerMIdx` rounds, with 24 cores computing their respective sub-blocks in parallel within each round:
 
 ```cpp
 // ProcessL2Cache: Split by M direction in rounds, each round 24 cores cover mIterPerRound M sub-blocks
