@@ -45,7 +45,7 @@ This example implements dynamic Shape matrix multiplication and inline quantizat
   3. ENABLE_UNITFLAG
 
      The example controls the unitFlag feature switch through the `ENABLE_UNITFLAG` template parameter, with default value true.
-     For detailed unitFlag description, see [Mmad unitFlag Feature Example](../mmad_unitflag/README.md)
+     For detailed unitFlag description, see [Mmad unitFlag Feature Example](../mmad_unitflag/README_en.md)
 
 - Example specifications:
 

@@ -293,7 +293,7 @@ In Case 4, the 32 threads concentrate on same-index subbank resources in the sam
 
 Case 0 and Case 2 show that mergeable access does not form subbank conflicts, and Case 1 is the conflict-free baseline. The cycles of Case 3 and Case 4 increase significantly, indicating that concentrating accesses on same-index subbanks in the same bank group causes subbank resource contention.
 
-When writing SIMT code, avoid concentrating multiple threads in the same Warp on same-index subbanks in the same bank group in one UB access instruction. If such an access pattern is unavoidable, consider adjusting the data layout, access stride, or adding padding in UB to distribute subbank accesses. For an optimization example that avoids access conflicts, see the [matrix transpose example](https://gitcode.com/cann/asc-devkit/tree/master/examples/03_simt_api/03_best_practices/00_memory_optimizations/matrix_transpose_practice).
+When writing SIMT code, avoid concentrating multiple threads in the same Warp on same-index subbanks in the same bank group in one UB access instruction. If such an access pattern is unavoidable, consider adjusting the data layout, access stride, or adding padding in UB to distribute subbank accesses. For an optimization example that avoids access conflicts, see the [matrix transpose example](../../../../03_best_practices/00_memory_optimizations/matrix_transpose_practice).
 
 ## Build and Run
 

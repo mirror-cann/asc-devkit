@@ -99,7 +99,7 @@ GM ──(MTE2)──> L1 ──(MTE1)──> L0A/L0B ──(Cube)──> L0C �
 
 ### Intermediate Performance Optimization
 
-The Matmul part of this example uses the same optimization methods as the [Matmul Basic API Best Practice Example](../../01_matrix_compute/matmul_basic_api_high_performance/README.md) (L1/L0 double buffering, large packet transfer, fine-grained pipeline synchronization, UnitFlag, etc.). The GELU part uses RegBase method on Ascend 950PR architecture and MemBase method on A2/A3 architecture. For detailed GELU formula simplification, RegBase API and VF fusion optimization analysis, please refer to the [Gelu Performance Tuning Example](../../02_reg_compute/gelu_high_performance/README_en.md).
+The Matmul part of this example uses the same optimization methods as the [Matmul Basic API Best Practice Example](../../01_matrix_compute/matmul_basic_api_high_performance/README_en.md) (L1/L0 double buffering, large packet transfer, fine-grained pipeline synchronization, UnitFlag, etc.). The GELU part uses RegBase method on Ascend 950PR architecture and MemBase method on A2/A3 architecture. For detailed GELU formula simplification, RegBase API and VF fusion optimization analysis, please refer to the [Gelu Performance Tuning Example](../../02_reg_compute/gelu_high_performance/README_en.md).
 
 #### Matmul Optimization Methods
 

@@ -26,7 +26,7 @@ This example uses `AddCustom` to demonstrate how to compile, package, and link a
 
 In this example, the `op` directory is responsible for compiling and packaging the custom operator static library. The generated static library path is `./build/customize-install/lib/lib${package_name}.a`. The `app` directory imports the static library via `find_package(${package_name})`, compiles `main.cpp` to generate `execute_add_op`, calls `aclnnAddCustom`, and verifies the results.
 
-For the AddCustom operator description and related information, refer to [Operator Description](../custom_op/README.md).
+For the AddCustom operator description and related information, refer to [Operator Description](../custom_op/README_en.md).
 
 ## Build and Run
 

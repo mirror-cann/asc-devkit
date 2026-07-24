@@ -27,7 +27,8 @@ This example uses Add computation as the carrier to demonstrate the Ascend C CPU
   The CPU Debug feature supports debugging the runtime state during CPU execution, primarily through the GDB tool. GDB debugging supports common debugging operations such as setting breakpoints, viewing registers and memory state, single-stepping, and viewing the call stack.
 
 - Example introduction:
-  The Add implementation in this example is consistent with the [Add basic example](../../00_introduction/01_add/add/README.md), using `float` type by default. Each block processes `2048` data elements. The workflow is: `DataCopy` input to UB, execute `Add`, then `DataCopy` the result back to GM.
+  The Add implementation in this example is consistent with the [Add basic example](../../00_introduction/01_add/add/README_en.md), using `float` type by default. Each block processes `2048` data elements. The workflow is: `DataCopy` input to UB, execute `Add`, then `DataCopy` the result back to GM.
+
 
   To enable CPU Debug, this example includes the `cpu_debug_launch.h` header file when the `ASCENDC_CPU_DEBUG` macro is defined.
 

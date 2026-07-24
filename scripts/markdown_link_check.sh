@@ -15,7 +15,7 @@ LYCHEE_VERSION="${LYCHEE_VERSION:-0.23.0}"
 MARKDOWN_LINK_CHECK_FULL="${MARKDOWN_LINK_CHECK_FULL:-0}"
 MARKDOWN_LINK_CHECK_DRY_RUN="${MARKDOWN_LINK_CHECK_DRY_RUN:-0}"
 MARKDOWN_LINK_CHECK_VERBOSE="${MARKDOWN_LINK_CHECK_VERBOSE:-0}"
-MARKDOWN_LINK_CHECK_ONLINE="${MARKDOWN_LINK_CHECK_ONLINE:-0}"
+MARKDOWN_LINK_CHECK_ONLINE="${MARKDOWN_LINK_CHECK_ONLINE:-1}"
 MARKDOWN_LINK_CHECK_START=$SECONDS
 
 REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
@@ -35,7 +35,7 @@ By default, checks changed Markdown files and Markdown files that link to them.
 Set MARKDOWN_LINK_CHECK_FULL=1 or pass --full to scan tracked Markdown files in the repository.
 Set MARKDOWN_LINK_CHECK_DRY_RUN=1 to print the computed scan set only.
 Set MARKDOWN_LINK_CHECK_LYCHEE to use a preinstalled lychee binary.
-Set MARKDOWN_LINK_CHECK_ONLINE=1 to check remote HTTP(S) links; remote links are skipped by default.
+Set MARKDOWN_LINK_CHECK_ONLINE=0 to skip remote HTTP(S) links.
 Set MARKDOWN_LINK_CHECK_LYCHEE_ARCHIVE_URL, MARKDOWN_LINK_CHECK_CARGO_BINSTALL_INSTALLER_URL, or
 MARKDOWN_LINK_CHECK_LYCHEE_PKG_URL to use mirrors.
 EOF
@@ -195,8 +195,7 @@ SCAN_SET_FILE=$(mktemp)
 LYCHEE_OUTPUT_FILE=$(mktemp)
 FILTERED_OUTPUT_FILE=$(mktemp)
 CROSS_LINK_OUTPUT_FILE=$(mktemp)
-GITCODE_LINK_OUTPUT_FILE=$(mktemp)
-trap 'rm -f "$SCAN_SET_FILE" "$LYCHEE_OUTPUT_FILE" "$FILTERED_OUTPUT_FILE" "$CROSS_LINK_OUTPUT_FILE" "$GITCODE_LINK_OUTPUT_FILE"' EXIT
+trap 'rm -f "$SCAN_SET_FILE" "$LYCHEE_OUTPUT_FILE" "$FILTERED_OUTPUT_FILE" "$CROSS_LINK_OUTPUT_FILE"' EXIT
 
 PY_ARGS=("$REPO_ROOT" "$SCAN_SET_FILE")
 if [ "${#INPUT_FILES[@]}" -gt 0 ]; then
@@ -712,7 +711,7 @@ import posixpath
 import re
 import sys
 from pathlib import Path
-from urllib.parse import unquote
+from urllib.parse import unquote, urlparse
 
 repo_root = Path(sys.argv[1])
 scan_set_file = Path(sys.argv[2])
@@ -799,6 +798,59 @@ def normalize_target(source_file, target):
     return normalized, suffix
 
 
+def normalize_gitcode_content_target(target):
+    parsed = urlparse(target.strip().strip("<>").strip("\"'"))
+    if parsed.scheme not in ("http", "https") or parsed.netloc != "gitcode.com":
+        return None
+
+    parts = [unquote(part) for part in parsed.path.split("/") if part]
+    if len(parts) < 5 or parts[:2] != ["cann", "asc-devkit"] or parts[3] != "master":
+        return None
+    if parts[2] not in ("blob", "tree", "raw"):
+        return None
+
+    target_path = posixpath.normpath("/".join(parts[4:]))
+    target = repo_root / target_path
+    if parts[2] == "tree" and not target.is_dir():
+        return None
+    if parts[2] in ("blob", "raw") and not target.is_file():
+        return None
+    suffix = (f"?{parsed.query}" if parsed.query else "") + (
+        f"#{parsed.fragment}" if parsed.fragment else ""
+    )
+    return target_path, suffix
+
+
+def readme_language(path):
+    name = posixpath.basename(path).lower()
+    if name == "readme_en.md":
+        return "en"
+    if name == "readme.md":
+        return "zh"
+    return None
+
+
+def readme_language_error(source, target_path, suffix):
+    source_language = readme_language(source)
+    if source_language is None or not target_path.startswith("examples/"):
+        return None
+
+    target = repo_root / target_path
+    if target.is_dir():
+        return None
+    target_language = readme_language(target_path)
+    if target_language is None or target_language == source_language:
+        if source_language == "en" and "#" in suffix and re.search(r"[\u4e00-\u9fff]", suffix):
+            return "English README links must use an English anchor"
+        return None
+
+    expected = posixpath.join(
+        posixpath.dirname(target_path),
+        "README_en.md" if source_language == "en" else "README.md",
+    )
+    return f"README language must match the source language: {target_path} -> {expected}{suffix}"
+
+
 def file_url(target_path, suffix):
     readme_path = (repo_root / target_path / "README.md")
     if readme_path.is_file():
@@ -843,8 +895,6 @@ for raw_line in scan_set_file.read_text(encoding="utf-8").splitlines():
 errors = []
 for source in scan_files:
     source_kind = source_area(source)
-    if source_kind is None:
-        continue
 
     source_path = repo_root / source
     try:
@@ -864,11 +914,29 @@ for source in scan_files:
 
         for target in iter_links(strip_inline_code(line)):
             normalized = normalize_target(source, target)
+            is_gitcode_target = False
+            if normalized is None:
+                normalized = normalize_gitcode_content_target(target)
+                is_gitcode_target = normalized is not None
             if normalized is None:
                 continue
 
             target_path, suffix = normalized
             target_kind = source_area(target_path)
+            if is_gitcode_target:
+                relative_target = posixpath.relpath(target_path, posixpath.dirname(source))
+                errors.append(
+                    f"{source}:{line_number}: links to same-repository content must use a relative path: "
+                    f"{target} -> {relative_target}{suffix}"
+                )
+                continue
+            if source_kind is None:
+                continue
+            if source_kind == target_kind == "examples":
+                language_error = readme_language_error(source, target_path, suffix)
+                if language_error is not None:
+                    errors.append(f"{source}:{line_number}: {language_error}: {target}")
+                    continue
             if {source_kind, target_kind} == {"api", "guide"}:
                 continue
             if target_kind == "examples" and source_kind in ("api", "guide"):
@@ -903,431 +971,6 @@ CROSS_LINK_RC=$?
 set -e
 
 set +e
-python3 - "$REPO_ROOT" "$SCAN_SET_FILE" "$GITCODE_LINK_OUTPUT_FILE" "$(markdown_check_duration)" <<'PY'
-import os
-import posixpath
-import re
-import subprocess
-import sys
-from pathlib import Path
-from urllib.parse import unquote, urlparse
-
-repo_root = Path(sys.argv[1])
-scan_set_file = Path(sys.argv[2])
-output_file = Path(sys.argv[3])
-duration = sys.argv[4]
-
-reference_pattern = re.compile(r"(?m)^(\s*\[[^\]]+\]:\s*)(\S+)")
-html_href_pattern = re.compile(r"""(?i)(\bhref\s*=\s*["'])([^"']+)(["'])""")
-fence_pattern = re.compile(r"^\s*(`{3,}|~{3,})")
-
-
-def markdown_inline_link_targets(text):
-    index = 0
-    while index < len(text):
-        marker = text.find("](", index)
-        if marker == -1:
-            break
-
-        start = marker + 2
-        cursor = start
-        depth = 0
-        escaped = False
-        while cursor < len(text):
-            char = text[cursor]
-            if escaped:
-                escaped = False
-            elif char == "\\":
-                escaped = True
-            elif char == "(":
-                depth += 1
-            elif char == ")":
-                if depth == 0:
-                    raw_target = text[start:cursor].strip()
-                    if raw_target.startswith("<") and ">" in raw_target:
-                        yield raw_target[1:raw_target.find(">")]
-                    elif raw_target:
-                        yield raw_target.split()[0]
-                    break
-                depth -= 1
-            cursor += 1
-        index = cursor + 1 if cursor < len(text) else marker + 2
-
-
-def iter_links(line):
-    yield from markdown_inline_link_targets(line)
-    for match in reference_pattern.finditer(line):
-        yield match.group(2)
-    for match in html_href_pattern.finditer(line):
-        yield match.group(2)
-
-
-def strip_inline_code(line):
-    stripped = []
-    index = 0
-    in_code = False
-    while index < len(line):
-        char = line[index]
-        if char != "`":
-            stripped.append(" " if in_code else char)
-            index += 1
-            continue
-
-        end = index + 1
-        while end < len(line) and line[end] == "`":
-            end += 1
-        stripped.extend(" " * (end - index))
-        in_code = not in_code
-        index = end
-    return "".join(stripped)
-
-
-def git_ref_for_branch(branch):
-    candidates = [
-        f"origin/{branch}",
-        f"refs/remotes/origin/{branch}",
-        branch,
-        f"refs/heads/{branch}",
-        f"refs/tags/{branch}",
-    ]
-    for candidate in candidates:
-        result = subprocess.run(
-            ["git", "rev-parse", "--verify", "--quiet", candidate],
-            cwd=repo_root,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-            check=False,
-        )
-        if result.returncode == 0:
-            return candidate
-    return None
-
-
-def git_object_type(ref, path):
-    result = subprocess.run(
-        ["git", "cat-file", "-t", f"{ref}:{path}"],
-        cwd=repo_root,
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.DEVNULL,
-        check=False,
-    )
-    if result.returncode != 0:
-        return None
-    return result.stdout.strip()
-
-
-def worktree_object_type(path):
-    target = repo_root / path
-    if target.is_file():
-        return "blob"
-    if target.is_dir():
-        return "tree"
-    return None
-
-
-def normalize_branch_name(branch):
-    if branch.startswith("refs/heads/"):
-        return branch[len("refs/heads/"):]
-    if branch.startswith("origin/"):
-        return branch[len("origin/"):]
-    return branch
-
-
-def resolve_target_branch():
-    for env_name in (
-        "PR_TARGET_BRANCH",
-        "CHANGE_TARGET",
-        "CI_MERGE_REQUEST_TARGET_BRANCH_NAME",
-        "GIT_TARGET_BRANCH",
-        "TARGET_BRANCH",
-        "BASE_REF",
-    ):
-        branch = os.environ.get(env_name)
-        if branch:
-            return normalize_branch_name(branch)
-    return None
-
-
-def resolve_base_commit():
-    base_candidates = []
-    configured_base = os.environ.get("MARKDOWN_LINK_CHECK_BASE_REF")
-    if configured_base:
-        base_candidates.append(configured_base)
-
-    for env_name in (
-        "PR_TARGET_BRANCH",
-        "CHANGE_TARGET",
-        "CI_MERGE_REQUEST_TARGET_BRANCH_NAME",
-        "GIT_TARGET_BRANCH",
-        "TARGET_BRANCH",
-        "BASE_REF",
-    ):
-        branch = os.environ.get(env_name)
-        if branch:
-            base_candidates.extend([f"origin/{branch}", branch])
-
-    base_candidates.extend(["origin/master", "origin/main", "master", "main"])
-
-    for base_ref in dict.fromkeys(base_candidates):
-        try:
-            verify = subprocess.run(
-                ["git", "rev-parse", "--verify", f"{base_ref}^{{commit}}"],
-                cwd=repo_root,
-                check=False,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.DEVNULL,
-            )
-            if verify.returncode != 0:
-                continue
-            merge_base = subprocess.run(
-                ["git", "merge-base", base_ref, "HEAD"],
-                cwd=repo_root,
-                check=False,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.DEVNULL,
-            )
-            if merge_base.returncode == 0:
-                commit = merge_base.stdout.decode("utf-8", errors="ignore").strip()
-                if commit:
-                    return commit
-        except OSError:
-            continue
-    return None
-
-
-def parse_added_lines(diff_text):
-    added_lines = {}
-    current_file = None
-    hunk_pattern = re.compile(r"^@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@")
-
-    for line in diff_text.splitlines():
-        if line.startswith("+++ b/"):
-            current_file = line[len("+++ b/"):]
-            added_lines.setdefault(current_file, set())
-            continue
-        if current_file is None:
-            continue
-
-        match = hunk_pattern.match(line)
-        if not match:
-            continue
-        start = int(match.group(1))
-        count = int(match.group(2) or "1")
-        if start == 0 or count == 0:
-            continue
-        added_lines[current_file].update(range(start, start + count))
-
-    return added_lines
-
-
-def merge_added_lines(target, source):
-    for path, lines in source.items():
-        target.setdefault(path, set()).update(lines)
-
-
-def diff_added_lines(args):
-    try:
-        result = subprocess.run(
-            args,
-            cwd=repo_root,
-            text=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.DEVNULL,
-            check=False,
-        )
-    except OSError:
-        return {}
-    if result.returncode not in (0, 1):
-        return {}
-    return parse_added_lines(result.stdout)
-
-
-def gitcode_added_line_map(scan_files, full_scan):
-    if full_scan:
-        return "all"
-
-    added_lines = {source: set() for source in scan_files}
-    base_commit = resolve_base_commit()
-    if base_commit:
-        merge_added_lines(
-            added_lines,
-            diff_added_lines(["git", "diff", "--unified=0", "--no-ext-diff", base_commit, "HEAD", "--", *scan_files]),
-        )
-
-    merge_added_lines(
-        added_lines,
-        diff_added_lines(["git", "diff", "--cached", "--unified=0", "--no-ext-diff", "--", *scan_files]),
-    )
-    merge_added_lines(
-        added_lines,
-        diff_added_lines(["git", "diff", "--unified=0", "--no-ext-diff", "--", *scan_files]),
-    )
-
-    if not base_commit and not any(added_lines.values()):
-        return None
-    return added_lines
-
-
-def split_gitcode_branch_path(parts, target_branch):
-    if target_branch:
-        branch_parts = target_branch.split("/")
-        if parts[:len(branch_parts)] == branch_parts and len(parts) > len(branch_parts):
-            return target_branch, parts[len(branch_parts):]
-        if len(branch_parts) > 1 and parts[0] == branch_parts[0] and len(parts) > len(branch_parts):
-            return "/".join(parts[:len(branch_parts)]), parts[len(branch_parts):]
-
-    for branch_len in range(len(parts) - 1, 0, -1):
-        branch = "/".join(parts[:branch_len])
-        if branch not in ref_cache:
-            ref_cache[branch] = git_ref_for_branch(branch)
-        if ref_cache[branch] is not None:
-            return branch, parts[branch_len:]
-
-    return parts[0], parts[1:]
-
-
-def asc_devkit_gitcode_target(target):
-    parsed = urlparse(target.strip().strip("<>").strip("\"'"))
-    if parsed.scheme not in ("http", "https") or parsed.netloc != "gitcode.com":
-        return None
-
-    parts = [unquote(part) for part in parsed.path.split("/") if part]
-    if len(parts) < 5:
-        return None
-    if parts[0:2] != ["cann", "asc-devkit"]:
-        return None
-    if parts[2] not in ("blob", "tree"):
-        return None
-
-    branch, path_parts = split_gitcode_branch_path(parts[3:], target_branch)
-    path = posixpath.normpath("/".join(path_parts))
-    if path.startswith("../") or path == ".":
-        return None
-    return branch, path
-
-
-def source_area(path):
-    if path == "docs/zh/api" or path.startswith("docs/zh/api/"):
-        return "api"
-    if path == "docs/zh/guide" or path.startswith("docs/zh/guide/"):
-        return "guide"
-    if path == "docs" or path.startswith("docs/"):
-        return "docs"
-    if path == "examples" or path.startswith("examples/"):
-        return "examples"
-    return None
-
-
-def relative_url(source, target, target_path):
-    parsed = urlparse(target.strip().strip("<>").strip("\"'"))
-    suffix = (f"?{parsed.query}" if parsed.query else "") + (
-        f"#{parsed.fragment}" if parsed.fragment else ""
-    )
-    relative = posixpath.relpath(target_path, posixpath.dirname(source))
-    return f"{relative}{suffix}"
-
-
-scan_files = []
-full_scan = False
-for raw_line in scan_set_file.read_text(encoding="utf-8").splitlines():
-    if raw_line.startswith("# full scan:"):
-        full_scan = True
-        continue
-    if not raw_line:
-        continue
-    scan_files.append(raw_line)
-
-errors = []
-ref_cache = {}
-object_cache = {}
-target_branch = resolve_target_branch()
-added_line_map = gitcode_added_line_map(scan_files, full_scan)
-for source in scan_files:
-    source_path = repo_root / source
-    try:
-        lines = source_path.read_text(encoding="utf-8").splitlines()
-    except UnicodeDecodeError:
-        lines = source_path.read_text(encoding="utf-8", errors="ignore").splitlines()
-    except OSError:
-        continue
-
-    in_fenced_code = False
-    for line_number, line in enumerate(lines, 1):
-        if fence_pattern.match(line):
-            in_fenced_code = not in_fenced_code
-            continue
-        if in_fenced_code:
-            continue
-
-        for target in iter_links(strip_inline_code(line)):
-            parsed = asc_devkit_gitcode_target(target)
-            if parsed is None:
-                continue
-
-            branch, target_path = parsed
-            source_kind = source_area(source)
-            target_kind = source_area(target_path)
-            policy_error = None
-            if source_kind == "examples" and target_kind in ("docs", "api", "guide"):
-                policy_error = "examples link to same-repository docs must use a relative path"
-            elif source_kind in ("docs", "api", "guide") and target_kind == "examples":
-                policy_error = "docs link to examples must use a relative path"
-            elif {source_kind, target_kind} == {"api", "guide"}:
-                policy_error = "API and guide cross-reference must use a relative path"
-
-            if policy_error is not None:
-                errors.append(
-                    f"{source}:{line_number}: {policy_error}: "
-                    f"{target} -> {relative_url(source, target, target_path)}"
-                )
-                continue
-
-            is_added_line = (
-                added_line_map == "all"
-                or (added_line_map is not None and line_number in added_line_map.get(source, set()))
-            )
-            if target_branch is not None and branch != target_branch and is_added_line:
-                errors.append(
-                    f"{source}:{line_number}: GitCode link branch must match PR target branch: "
-                    f"{target} uses {branch}, target branch is {target_branch}"
-                )
-                continue
-            if target_branch is not None and branch == target_branch:
-                ref = "working tree"
-                cache_key = (ref, target_path)
-                if cache_key not in object_cache:
-                    object_cache[cache_key] = worktree_object_type(target_path)
-            else:
-                if branch not in ref_cache:
-                    ref_cache[branch] = git_ref_for_branch(branch)
-                ref = ref_cache[branch]
-                if ref is None:
-                    continue
-
-                cache_key = (ref, target_path)
-                if cache_key not in object_cache:
-                    object_cache[cache_key] = git_object_type(ref, target_path)
-            if object_cache[cache_key] is None:
-                errors.append(
-                    f"{source}:{line_number}: GitCode link target does not exist in {ref}: "
-                    f"{target} -> {target_path}"
-                )
-
-with output_file.open("w", encoding="utf-8") as handle:
-    if errors:
-        handle.write(
-            f"[Markdown check] FAILED: {len(errors)} GitCode link target item(s), "
-            f"{len(scan_files)} file(s) checked, duration={duration}.\n\nFailed:\n"
-        )
-        for error in errors:
-            handle.write(error + "\n")
-
-sys.exit(1 if errors else 0)
-PY
-GITCODE_LINK_RC=$?
-set -e
-
 LYCHEE_BIN=$(find_lychee)
 LYCHEE_ARGS=(--no-progress --config "$CONFIG_FILE")
 if [ "$MARKDOWN_LINK_CHECK_ONLINE" != "1" ]; then
@@ -1447,13 +1090,6 @@ PY
 FINAL_RC=0
 if [ "$CROSS_LINK_RC" -ne 0 ]; then
     cat "$CROSS_LINK_OUTPUT_FILE"
-    FINAL_RC=1
-fi
-if [ "$GITCODE_LINK_RC" -ne 0 ]; then
-    if [ "$FINAL_RC" -ne 0 ]; then
-        printf '\n'
-    fi
-    cat "$GITCODE_LINK_OUTPUT_FILE"
     FINAL_RC=1
 fi
 if [ -s "$FILTERED_OUTPUT_FILE" ]; then

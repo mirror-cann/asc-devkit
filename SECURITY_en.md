@@ -7,8 +7,8 @@ From a security perspective, it is not recommended to use root or other administ
 ## File Permission Control
 
 - Recommend users set the running system umask value to 0027 or higher on hosts (including host machines) and containers, ensuring new folder default maximum permission is 750 and new file default maximum permission is 640.
-- Recommend users implement permission control and other security measures for sensitive content such as personal privacy data, business assets, source files, and various files saved during code development. For example, permission control for this project installation directory, public data file permission control. Refer to [A-File (Folder) Permission Control Recommended Maximum Values for Various Scenarios](https://gitcode.com/cann/asc-devkit/blob/master/SECURITY_en.md#a-file-folder-permission-control-recommended-maximum-values-for-various-scenarios) for recommended permissions.
-- Users need to implement permission control during installation and usage. Refer to [A-File (Folder) Permission Control Recommended Maximum Values for Various Scenarios](https://gitcode.com/cann/asc-devkit/blob/master/SECURITY_en.md#a-file-folder-permission-control-recommended-maximum-values-for-various-scenarios) for file permission reference settings.
+- Recommend users implement permission control and other security measures for sensitive content such as personal privacy data, business assets, source files, and various files saved during code development. For example, permission control for this project installation directory, public data file permission control. Refer to [A-File (Folder) Permission Control Recommended Maximum Values for Various Scenarios](SECURITY_en.md#a-file-folder-permission-control-recommended-maximum-values-for-various-scenarios) for recommended permissions.
+- Users need to implement permission control during installation and usage. Refer to [A-File (Folder) Permission Control Recommended Maximum Values for Various Scenarios](SECURITY_en.md#a-file-folder-permission-control-recommended-maximum-values-for-various-scenarios) for file permission reference settings.
 
 ## Build Security Statement
 

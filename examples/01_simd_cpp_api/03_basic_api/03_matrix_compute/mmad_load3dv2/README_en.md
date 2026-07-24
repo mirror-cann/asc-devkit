@@ -52,7 +52,7 @@ Since this example does not currently support int4b_t input data type, it demons
 
 Note: For Atlas A3 Training Series Products/Atlas A3 Inference Series Products and Atlas A2 Training Series Products/Atlas A2 Inference Series Products, when the input data type is B8 and the destination address is on L0B, the load3dv2 instruction is not supported. For compatibility, when scenarioNum=5, SplitB calls the load2d instruction.
 
-  In this example, the A matrix in scenarioNum=3 and 4 is consistent with scenarioNum=12 and 13 in the [load_data_l12l0](../load_data_l12l0/README.md) example respectively, and the B matrix is consistent with scenarioNum=13 in that example. Therefore, the specific parameter configuration and diagrams of the load3dv2 instruction can be found in the "6. L1 to L0 (LoadData)" section of that example's readme.
+  In this example, the A matrix in scenarioNum=3 and 4 is consistent with scenarioNum=12 and 13 in the [load_data_l12l0](../load_data_l12l0/README_en.md) example respectively, and the B matrix is consistent with scenarioNum=13 in that example. Therefore, the specific parameter configuration and diagrams of the load3dv2 instruction can be found in the "6. L1 to L0 (LoadData)" section of that example's readme.
 
   Since the input data type differences have minimal impact on load3dv2 instruction parameter configuration, the remaining scenarios in this example can reference scenarioNum=3 and 4.
 

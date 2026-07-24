@@ -32,7 +32,7 @@ $$
 
 **说明**：GELU 是神经网络中常用的激活函数，用于替代 ReLU 以获得更平滑的梯度特性。
 
-本样例采用 RegBase 编程方式实现 GELU 计算——与 [01_add/add 样例](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/00_introduction/01_add/add/README.md) 使用的 MemBase（基于 [LocalTensor](../../../../../docs/zh/api/SIMD-API/基础API/数据结构/LocalTensor/LocalTensor简介.md) + Compute API）方式相比，RegBase 允许中间计算结果暂存在寄存器而非 UB 中，减少了 UB 读写次数，适合多步骤融合计算场景。
+本样例采用 RegBase 编程方式实现 GELU 计算——与 [01_add/add 样例](../../01_add/add/README.md) 使用的 MemBase（基于 [LocalTensor](../../../../../docs/zh/api/SIMD-API/基础API/数据结构/LocalTensor/LocalTensor简介.md) + Compute API）方式相比，RegBase 允许中间计算结果暂存在寄存器而非 UB 中，减少了 UB 读写次数，适合多步骤融合计算场景。
 
 完整的数据通路为：GM → UB → 寄存器（逐步计算）→ UB → GM。
 
@@ -150,8 +150,8 @@ __global__ __vector__ void gelu_custom(__gm__ uint8_t* x, __gm__ uint8_t* y)
 
 | 可优化方向 | 当前实现的问题 | 预期优化收益 |
 |-----------|--------------|------------|
-| VF融合双发优化 | 当前 VF 函数内 GELU 计算依赖路径较长，虽然已使用 `asc_vf_call` 调用 RegBase API，但 VF 融合的双发特性未充分利用，IPC（每 cycle 指令发射数量）较低 | 利用 VF 融合双发特性，常规计算指令（Mul/Muls/Add/Adds）并行度可达 512 bytes/cycle，向量化指令耗时可减少 **55%** 以上。详见[Gelu性能调优样例 Case 1](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/05_best_practices/02_reg_compute/gelu_high_performance/README.md) |
-| 循环展开优化 | VF 函数内循环为简单 for 循环，编译器无法充分调度指令级并行，执行队列中可双发的指令数受限 | 使用 `#pragma unroll N` 展开循环，提高指令发射并行度和 IPC，在 VF 融合基础上向量指令耗时可进一步减少约 **4.6%**。展开因子 N 需根据实际场景调优，过大会增加寄存器压力。详见[Gelu性能调优样例 Case 2](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/05_best_practices/02_reg_compute/gelu_high_performance/README.md) |
+| VF融合双发优化 | 当前 VF 函数内 GELU 计算依赖路径较长，虽然已使用 `asc_vf_call` 调用 RegBase API，但 VF 融合的双发特性未充分利用，IPC（每 cycle 指令发射数量）较低 | 利用 VF 融合双发特性，常规计算指令（Mul/Muls/Add/Adds）并行度可达 512 bytes/cycle，向量化指令耗时可减少 **55%** 以上。详见[Gelu性能调优样例 Case 1](../../../05_best_practices/02_reg_compute/gelu_high_performance/README.md) |
+| 循环展开优化 | VF 函数内循环为简单 for 循环，编译器无法充分调度指令级并行，执行队列中可双发的指令数受限 | 使用 `#pragma unroll N` 展开循环，提高指令发射并行度和 IPC，在 VF 融合基础上向量指令耗时可进一步减少约 **4.6%**。展开因子 N 需根据实际场景调优，过大会增加寄存器压力。详见[Gelu性能调优样例 Case 2](../../../05_best_practices/02_reg_compute/gelu_high_performance/README.md) |
 | 流水线串行执行 | 当前搬入、计算、搬出三个阶段严格串行执行，各硬件单元（MTE2/V/MTE3）无法同时工作，数据搬运占比超过 90%，性能瓶颈为 MTE2 bound | 采用多缓冲（Double Buffer/Triple Buffer）机制，使搬入、计算、搬出可并行执行，提升硬件利用率和吞吐 |
 | 核数固定 | 固定使用 2 个核，未根据实际可用核数动态分配 | 动态获取可用核数（[GetBlockNum](../../../../../docs/zh/api/SIMD-API/基础API/工具接口/系统资源与变量/GetBlockNum.md)），充分利用多核并行能力 |
 

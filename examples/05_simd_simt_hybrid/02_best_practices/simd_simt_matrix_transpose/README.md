@@ -2,7 +2,7 @@
 
 ## 概述
 
-本样例基于SIMT场景下的[matrix_transpose_practice样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/03_simt_api/03_best_practices/00_memory_optimizations/matrix_transpose_practice)，采用SIMD与SIMT混合编程对自定义transpose算子进行进一步优化，通过混合编程中的MTE搬运与SIMT计算并行，提高矩阵转置性能。为了展示逐步优化过程，本样例从直接全局内存转置出发，引入MTE搬运、UB中转与32×32分块，对比按tile分组启动Thread Block与固定Thread Block数两种映射方式，增加UB padding降低bank冲突，最后借助双缓冲（Double Buffer）使MTE2搬入、SIMT VF转置和MTE3搬出流水并行，呈现SIMD与SIMT混合矩阵转置的调优路径。
+本样例基于SIMT场景下的[matrix_transpose_practice样例](../../../03_simt_api/03_best_practices/00_memory_optimizations/matrix_transpose_practice)，采用SIMD与SIMT混合编程对自定义transpose算子进行进一步优化，通过混合编程中的MTE搬运与SIMT计算并行，提高矩阵转置性能。为了展示逐步优化过程，本样例从直接全局内存转置出发，引入MTE搬运、UB中转与32×32分块，对比按tile分组启动Thread Block与固定Thread Block数两种映射方式，增加UB padding降低bank冲突，最后借助双缓冲（Double Buffer）使MTE2搬入、SIMT VF转置和MTE3搬出流水并行，呈现SIMD与SIMT混合矩阵转置的调优路径。
 
 ## 支持的产品
 
@@ -212,7 +212,7 @@ SIMT VF内访问UB时的bank冲突为更细粒度的subbank冲突，主要有以
 - **写写冲突**：多个写操作同时访问同一个bank group的相同编号subbank。
 - **读读冲突**：多个读操作同时访问同一个bank group的相同编号subbank。
 
-详细的地址低位交织规则以及冲突场景可参考[bank_conflict样例](https://gitcode.com/cann/asc-devkit/blob/master/examples/03_simt_api/02_features/01_api_features/00_memory_access/bank_conflict)。
+详细的地址低位交织规则以及冲突场景可参考[bank_conflict样例](../../../03_simt_api/02_features/01_api_features/00_memory_access/bank_conflict)。
 
 Case 2中UB的 `in_tile`数组按照行优先存储。按照地址低位交织规则，`in_tile`数组的第一行刚好覆盖bank0～bank3，第二行覆盖bank4～bank7，第三行覆盖bank8～bank11，其余行依次类推。每行32个float数据会恰好跨越4个bank存储。如图2所示，图中展示了tile数组前12行元素在UB上的排布，每行第一个元素用蓝色进行标记。SIMT VF转置时，一个Warp的线程会读取 `in_tile`的一列元素；访问UB时，32个线程会集中访问两个bank group的subbank0，属于读读冲突场景。`out_tile`按输出tile行方向连续写入，可通过访存合并降低写入开销，因此不需要增加padding。
 
@@ -459,7 +459,7 @@ msOpProf工具是单算子性能分析工具。包含msopprof和msopprof simulat
   msopprof simulator --soc-version=<soc_version> ./matrix_transpose
   ```
 
-  > 使用仿真调优功能前，需要在 `CMakeLists.txt` 中添加 `-g` 编译选项，用于生成调试信息，使仿真器能够采集指令流水图。`soc_version` 获取方式及仿真调优其他说明可参考[仿真调优样例](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/01_utilities/08_simulator)。
+  > 使用仿真调优功能前，需要在 `CMakeLists.txt` 中添加 `-g` 编译选项，用于生成调试信息，使仿真器能够采集指令流水图。`soc_version` 获取方式及仿真调优其他说明可参考[仿真调优样例](../../../01_simd_cpp_api/01_utilities/08_simulator)。
   >
 
   命令完成后，会在当前目录下生成以 `OPPROF_{timestamp}_XXX` 命名的文件夹，产物结构如下：

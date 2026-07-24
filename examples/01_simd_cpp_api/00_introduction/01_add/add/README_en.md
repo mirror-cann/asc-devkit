@@ -111,7 +111,7 @@ Invocation method: Use the kernel invocation operator `<<<numBlocks, 0, stream>>
 | 3 | Dual-buffer pipeline parallelism | Load, compute, and store stages execute strictly sequentially, hardware units (MTE2/V/MTE3) cannot work simultaneously | Adopt Ping-Pong dual-buffer mechanism, enabling load, compute, and store to execute in parallel, hiding transfer latency |
 | 4 | L2 Cache bypass | Add input data is read only once, but passes through L2 Cache by default, increasing Cache pollution | Set L2 Cache bypass for streaming access data, reduce unnecessary Cache overhead, improve transfer efficiency |
 
-For the complete performance tuning process, please refer to the [Add Performance Tuning Sample](https://gitcode.com/cann/asc-devkit/tree/master/examples/01_simd_cpp_api/05_best_practices/00_vector_compute/add_high_performance).
+For the complete performance tuning process, please refer to the [Add Performance Tuning Sample](../../../05_best_practices/00_vector_compute/add_high_performance).
 
 ## Functional Debugging
 

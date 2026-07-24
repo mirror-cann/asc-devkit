@@ -295,7 +295,7 @@ In SIMT programming, bank conflicts are more fine-grained subbank conflicts, mai
 - **Write-write conflict**: Multiple write operations access subbanks with the same index in the same bank group at the same time.
 - **Read-read conflict**: Multiple read operations access subbanks with the same index in the same bank group at the same time.
 
-For detailed low-bit UB address interleaving rules and conflict scenarios, see the [bank_conflict example](https://gitcode.com/cann/asc-devkit/blob/master/examples/03_simt_api/02_features/01_api_features/00_memory_access/bank_conflict).
+For detailed low-bit UB address interleaving rules and conflict scenarios, see the [bank_conflict example](../../../02_features/01_api_features/00_memory_access/bank_conflict).
 
 **Figure 3: UB bank structure**
 
@@ -474,7 +474,7 @@ cmake -DCMAKE_ASC_RUN_MODE=sim -DCMAKE_ASC_ARCHITECTURES=dav-3510 -DSCENARIO_NUM
 msopprof simulator --soc-version=<soc_version> ./matrix_transpose
 ```
 
-> Before using simulation tuning, add the `-g` compilation option to `CMakeLists.txt` to generate debug information. This allows the simulator to collect instruction pipeline diagrams. For how to obtain `soc_version` and for more simulation tuning information, see the [simulator sample](https://gitcode.com/cann/asc-devkit/tree/master/examples/03_simt_api/01_utilities/07_simulator).
+> Before using simulation tuning, add the `-g` compilation option to `CMakeLists.txt` to generate debug information. This allows the simulator to collect instruction pipeline diagrams. For how to obtain `soc_version` and for more simulation tuning information, see the [simulator sample](../../../01_utilities/07_simulator).
 
 After the command completes, a folder named `OPPROF_{timestamp}_XXX` is generated in the current directory. The artifact structure is as follows:
 

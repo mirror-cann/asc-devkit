@@ -40,19 +40,19 @@ Each sub-project independently completes custom operator compilation, packaging,
 
 `parallel_ops_package` uses the same Add/LeakyRelu example description as `custom_op`. Refer to:
 
-- [custom_op/README.md "Example Description" section](../custom_op/README.md#样例描述)
+- [custom_op/README_en.md "Example Description" section](../custom_op/README_en.md#example-description)
 
 ## Example Specification Description
 
 `parallel_ops_package` uses the same Add/LeakyRelu specification description as `custom_op`. Refer to:
 
-- [custom_op/README.md "Example Specification Description" section](../custom_op/README.md#样例规格描述)
+- [custom_op/README_en.md "Example Specification Description" section](../custom_op/README_en.md#example-specification-description)
 
 ## Code Implementation
 
 The Add/LeakyRelu code implementation for `parallel_ops_package` can be found in the `custom_op` documentation.
 
-- [custom_op/README.md "Code Implementation" section](../custom_op/README.md#代码实现介绍)
+- [custom_op/README_en.md "Code Implementation" section](../custom_op/README_en.md#code-implementation)
 
 ## Build and Run
 

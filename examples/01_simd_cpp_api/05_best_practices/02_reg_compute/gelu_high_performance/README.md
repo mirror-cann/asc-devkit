@@ -4,7 +4,7 @@
 
 本样例以Gelu计算为例，介绍RegBase的向量性能调优方法，样例展示使能VF融合和循环展开之后的性能收益情况。
 
-> **前置阅读**：[Gelu算子入门样例](https://gitcode.com/cann/asc-devkit/blob/master/examples/01_simd_cpp_api/00_introduction/04_reg_compute/gelu/README.md)，本样例基于入门样例进行性能优化，建议先阅读入门样例了解基础概念。
+> **前置阅读**：[Gelu算子入门样例](../../../00_introduction/04_reg_compute/gelu/README.md)，本样例基于入门样例进行性能优化，建议先阅读入门样例了解基础概念。
 
 **优化路径**：
 - Case 0: Gelu未使能VF融合能力（基准）

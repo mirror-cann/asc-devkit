@@ -21,7 +21,7 @@ This example is based on the Gather operator and demonstrates how to collect on-
 ```
 
 ## Operator Description
-  The gather operator implements the function of obtaining 12288 rows of data at specified indices from a 2D vector with shape [100000,128]. For detailed function description, refer to the [Gather Operator Details](../../../00_introduction/01_gather/basic_gather/gather_2d/README.md) section.
+  The gather operator implements the function of obtaining 12288 rows of data at specified indices from a 2D vector with shape [100000,128]. For detailed function description, refer to the [Gather Operator Details](../../../00_introduction/01_gather/basic_gather/gather_2d/README_en.md) section.
 
 ## msOpProf Tool Introduction
 The msOpProf tool is a single-operator performance analysis tool. It includes two usage modes: msopprof and msopprof simulator. This tool helps users identify anomalies in operator memory, operator code, and operator instructions, enabling comprehensive operator tuning. It currently supports performance data collection and automatic parsing based on different run modes (on-board or simulation) and different file formats (executable files or operator binary .o files).
